@@ -257,7 +257,7 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
     <>
       <div className="bg-white py-3 shadow-sm fixed-navbar" style={{ top: 0 }}>
         <Container className="d-flex justify-content-between align-items-center ">
-        <Navbar.Brand onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+        <Navbar.Brand onClick={() => navigate('/MyDressCode_FE')} style={{ cursor: 'pointer' }}>
     <img src="images/mydresscodelogo.png" alt="MyDressCode" width="180" height="60" />
 </Navbar.Brand>
 
