@@ -130,7 +130,7 @@ function App() {
           <Outlet context={{ handleCartUpdate }} /> {/* Pass handleCartUpdate to Outlet */}
         </div>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/MyDressCode_FE" element={<Home />} />
           <Route path="/category/:categoryName" element={<CategoryPage />} />
           <Route path="/product/:productId" element={<ProductDetails onCartUpdate={handleCartUpdate} setCartItems={setCartItems} cartItems={cartItems} wishlistItems={wishlistItems} setWishlistItems={setWishlistItems} onWishlistUpdate={handleWishlistUpdate} />} />
           <Route 
