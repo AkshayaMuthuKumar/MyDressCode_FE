@@ -53,7 +53,6 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
       try {
         const response = await axios.get(`${API_URL}/products/getProductById/${productId}`);
         const productData = response.data.data;
-        console.log("productData", productData)
         setProduct(productData);
         setSelectedSize(productData.size || '');
       } catch (error) {
@@ -76,7 +75,6 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
   }, [productId]);
   if (!product) return <p>No product found.</p>;
 
-  console.log("currentUserIdPD", currentUserId)
 
   // Handle cart click
   const handleCartClick = async () => {
@@ -223,13 +221,9 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
         <div className="col-md-6">
           <div className="product-images">
             <div className="row mb-3">
-              <div className="col-3">
-                <img src={product.image} alt="Small" className="img-thumbnail mb-2" />
-                <img src={product.image} alt="Small" className="img-thumbnail mb-2" />
-                <img src={product.image} alt="Small" className="img-thumbnail mb-2" />
-              </div>
+              
               <div className="col-9">
-                <img src={product.image} alt={product.name} className="img-fluid" />
+                <img src={product.image} alt={product.name} className="img-fluid" style={{width:"500px"}} />
               </div>
             </div>
           </div>
