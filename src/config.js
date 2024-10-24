@@ -1,3 +1,6 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://mydresscode-be.onrender.com/api';
 
 export default API_URL;
+
+
+
