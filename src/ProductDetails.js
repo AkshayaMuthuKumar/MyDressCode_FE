@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useOutletContext } from 'react-router-dom';
 import axios from 'axios';
-import { FaShoppingCart, FaHeart, FaStar } from 'react-icons/fa';
+import { FaShoppingCart, FaHeart, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import '../src/app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthContext } from '../src/UserContext';
@@ -20,7 +20,9 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
   const [reviewText, setReviewText] = useState('');
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [showAlert, setShowAlert] = useState(false); // State to manage alert visibility
+  const [suggestedProducts, setSuggestedProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [highlight, setHighlight] = useState(false); // State to control highlight effect
 
   const [buttonColor, setButtonColor] = useState(() => {
     return localStorage.getItem(`buttonColor-${productId}`) || '#6c757d'; // Load color from localStorage
@@ -37,134 +39,146 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
     return localStorage.getItem(`wishlist-${productId}`) === 'true'; // Initialize from localStorage
   });
   const [quantity, setQuantity] = useState(1);
+  const productsPerPage = 4; // Number of products to show per row
 
   const reviewsPerPage = 2;
   const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+  const highlightDuration = 120000; // Duration for highlight in milliseconds (2 minutes)
 
   const handleRating = (rate) => {
     setRating(rate);
   };
 
-  console.log(cartItems, "cartItems")
-  console.log(typeof isAuthenticated); // Should log 'function'
+  const fetchProductDetails = async (productId) => {
+    try {
+      const response = await axios.get(`${API_URL}/products/getProductById/${productId}`);
+      const productData = response.data.data;
+      setProduct(productData);
+      setSelectedSize(productData.size || '');
+      if (productData.category) {
+        await fetchProductsByCategory(productData.category); // Make sure to await this
+      }
+     
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+      setProduct(null);
+    }
+  };
+
+  const fetchProductsByCategory = async (category) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(
+        `${API_URL}/products/getProductsbySelectedCategory?getProductsbySelectedCategory=${category}`,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      const productData = Array.isArray(response.data.data) ? response.data.data : [];
+      const filteredSuggestions = productData.filter(p => p.id !== product?.id); // Use optional chaining
+      setSuggestedProducts(filteredSuggestions);
+    } catch (error) {
+      console.error('Error fetching products by category:', error);
+    }
+  };
+
 
   useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/products/getProductById/${productId}`);
-        const productData = response.data.data;
-        setProduct(productData);
-        setSelectedSize(productData.size || '');
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-        setProduct(null);
-      }
-    };
-
-    const fetchReviews = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/products/getReviewsByProductId/${productId}`);
-        setReviews(response.data.data);
-      } catch (error) {
-        console.error('Error fetching reviews:', error);
-      }
-    };
-
-    fetchProductDetails();
-    fetchReviews();
+    // Fetch details for the initial productId when component mounts
+    if (productId) {
+      fetchProductDetails(productId); // Make sure productId is defined
+    }
   }, [productId]);
+
+  const handleViewDetails = (id) => {
+    fetchProductDetails(id); // Fetch details for the clicked product ID
+    window.scrollTo(0, 0); // Scroll to the top of the page
+
+  };
+  
+
+  const totalPagesSugesstion = Math.ceil(suggestedProducts.length / productsPerPage);
+  const handleNext = () => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPagesSugesstion - 1));
+  const handlePrevious = () => setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   if (!product) return <p>No product found.</p>;
 
 
-  // Handle cart click
   const handleCartClick = async () => {
     const token = localStorage.getItem("token");
+  
     if (!isAuthenticated || !currentUserId) {
-      setShowAlert(true); // Show the alert instead of alert box
-      return; // Exit the function if the user is not authenticated
-    }
-    const productPrice = product.discountAmount || product.originalAmount;
-
-    try {
-      const response = await axios.post(`${API_URL}/users/${currentUserId}/toggleCartItem`, {
-        productId: productId,
-        product_name: product.name,
-        image: product.image,
-        quantity: quantity,
-        price: productPrice
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const { isAdded, buttonColor, cartItem } = response.data;
-      setButtonColor(buttonColor);
-
-      if (isAdded) {
-        setCartItems([...cartItems, cartItem]); // Add item with all details to the cart
-        setIsAddedToCart(true);
-        localStorage.setItem(`cart-${productId}`, 'true');
-        localStorage.setItem(`buttonColor-${productId}`, 'true'); // Store button color in localStorage
-
+      // Toggle cart state for unauthenticated users
+      if (isAddedToCart) {
+        setCartItems(cartItems.filter(item => item.productId !== productId));
+        setButtonColor('#6c757d'); // Grey for removal
       } else {
-        setCartItems(cartItems.filter(item => item.id !== productId)); // Remove from cart
-        setIsAddedToCart(false);
-        localStorage.setItem(`cart-${productId}`, 'false');
-        localStorage.setItem(`buttonColor-${productId}`, 'false'); // Store button color in localStorage
+        setCartItems([...cartItems, { productId, name: product.name, quantity, price: product.discountAmount }]);
+        setButtonColor('#dc3545'); // Red for addition
       }
-
-      localStorage.setItem(`buttonColor-${productId}`, buttonColor); // Store wishlist button color in localStorage
-
-      
-
-    } catch (error) {
-      console.error('Error toggling cart item:', error);
+      setIsAddedToCart(!isAddedToCart);
+      localStorage.setItem(`cart-${productId}`, !isAddedToCart ? 'true' : 'false');
+      localStorage.setItem(`buttonColor-${productId}`, !isAddedToCart ? '#dc3545' : '#6c757d');
+    } else {
+      // Toggle cart state for authenticated users
+      try {
+        const response = await axios.post(
+          `${API_URL}/users/${currentUserId}/toggleCartItem`, 
+          { productId, product_name: product.name, image: product.image, quantity, price: product.discountAmount || product.originalAmount },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+  
+        const { isAdded, buttonColor, cartItem } = response.data;
+        setCartItems(isAdded ? [...cartItems, cartItem] : cartItems.filter(item => item.productId !== productId));
+        setButtonColor(buttonColor);
+        setIsAddedToCart(isAdded);
+        localStorage.setItem(`buttonColor-${productId}`, buttonColor);
+      } catch (error) {
+        console.error('Error toggling cart item:', error);
+      }
     }
+    window.location.reload(); // Reloads the page after toggle
+
   };
-
-
+  
   const handleWishlistClick = async () => {
     const token = localStorage.getItem("token");
+  
     if (!isAuthenticated || !currentUserId) {
-      setShowAlert(true); // Show the alert instead of alert box
-      return; // Exit the function if the user is not authenticated
-    }
-    const productPrice = product.discountAmount || product.originalAmount;
-
-    try {
-      const response = await axios.post(`${API_URL}/users/${currentUserId}/toggleWishlistItem`, {
-        productId: productId,
-        product_name: product.name,
-        image: product.image,
-        price: productPrice
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const { isAdded, buttonColor, wishlistItem } = response.data;
-
-      if (isAdded) {
-        setWishlistItems([...wishlistItems, wishlistItem]); // Add item with all details to the cart
-        setIsAddedToWishlist(true);
-        localStorage.setItem(`wishlist-${productId}`, 'true');
-        localStorage.setItem(`wishlistButtonColor-${productId}`, 'true');
+      // Toggle wishlist state for unauthenticated users
+      if (isAddedToWishlist) {
+        setWishlistItems(wishlistItems.filter(item => item.productId !== productId));
+        setWishlistButtonColor('#6c757d'); // Grey for removal
       } else {
-        setWishlistItems(wishlistItems.filter(item => item.id !== productId)); // Remove from cart
-        setIsAddedToWishlist(false);
-        localStorage.setItem(`wishlist-${productId}`, 'false');
-        localStorage.setItem(`wishlistButtonColor-${productId}`, 'false');
+        setWishlistItems([...wishlistItems, { productId, name: product.name, price: product.discountAmount }]);
+        setWishlistButtonColor('#dc3545'); // Red for addition
       }
-
-      setWishlistButtonColor(buttonColor);
-      localStorage.setItem(`wishlistButtonColor-${productId}`, buttonColor); // Store wishlist button color in localStorage
-
-    } catch (error) {
-      console.error('Error toggling cart item:', error);
+      setIsAddedToWishlist(!isAddedToWishlist);
+      localStorage.setItem(`wishlist-${productId}`, !isAddedToWishlist ? 'true' : 'false');
+      localStorage.setItem(`wishlistButtonColor-${productId}`, !isAddedToWishlist ? '#dc3545' : '#6c757d');
+    } else {
+      // Toggle wishlist state for authenticated users
+      try {
+        const response = await axios.post(
+          `${API_URL}/users/${currentUserId}/toggleWishlistItem`, 
+          { productId, product_name: product.name, image: product.image, price: product.discountAmount || product.originalAmount },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+  
+        const { isAdded, buttonColor, wishlistItem } = response.data;
+        setWishlistItems(isAdded ? [...wishlistItems, wishlistItem] : wishlistItems.filter(item => item.productId !== productId));
+        setWishlistButtonColor(buttonColor);
+        setIsAddedToWishlist(isAdded);
+        localStorage.setItem(`wishlistButtonColor-${productId}`, buttonColor);
+      } catch (error) {
+        console.error('Error toggling wishlist item:', error);
+      }
     }
+    window.location.reload(); // Reloads the page after toggle
+
   };
+  
+  
+
 
 
   const handleSizeChange = (size) => {
@@ -206,19 +220,9 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
 
   return (
     <div className="container product-details" style={{ marginTop: "150px" }}>
-      {showAlert && (
-        <div className="alert alert-warning alert-dismissible fade show" role="alert">
-          <strong>Please login to buy or add items to your wishlist!</strong>
-          <button
-            type="button"
-            className="btn-close"
-            aria-label="Close"
-            onClick={() => setShowAlert(false)} // Close the alert
-          ></button>
-        </div>
-      )}
-      <div className="row">
-        <div className="col-md-6">
+     
+     <div className={`row ${highlight ? 'highlight' : ''}`}> {/* Add highlight class conditionally */}
+     <div className="col-md-6">
           <div className="product-images">
             <div className="row mb-3">
               
@@ -235,15 +239,15 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
             {product.discountAmount ? (
               <>
                 {/* Display discounted price */}
-                <span className="text-danger display-4">${product.discountAmount}</span>
+                <span className="text-danger display-4">₹{product.discountAmount}</span>
                 {/* Display original price as crossed-out */}
                 <span className="text-muted ms-3">
-                  <del>${product.originalAmount}</del>
+                  <del>₹{product.originalAmount}</del>
                 </span>
               </>
             ) : (
               // Display original price when there's no discount
-              <span className="text-danger display-4">${product.originalAmount}</span>
+              <span className="text-danger display-4">₹{product.originalAmount}</span>
             )}
           </div>
 
@@ -305,120 +309,54 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
         </div>
       </div>
 
-      <div className="col-md-12">
-        <div className="box border p-4">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="mt-5">
-                <h4>Add Review</h4>
-                <form onSubmit={handleReviewSubmit}>
-                  <div className="mb-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Your Name"
-                      value={reviewName}
-                      onChange={(e) => setReviewName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <input
-                      type="email"
-                      className="form-control"
-                      placeholder="Your Email"
-                      value={reviewEmail}
-                      onChange={(e) => setReviewEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <input
-                      type="date"
-                      className="form-control"
-                      placeholder="Date of Purchase"
-                      value={purchaseDate}
-                      onChange={(e) => setPurchaseDate(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label>Overall Experience:</label>
-                    <select
-                      className="form-select"
-                      value={experience}
-                      onChange={(e) => setExperience(e.target.value)}
-                      required
-                    >
-                      <option value="">Select...</option>
-                      <option value="Excellent">Excellent</option>
-                      <option value="Good">Good</option>
-                      <option value="Average">Average</option>
-                      <option value="Poor">Poor</option>
-                    </select>
-                  </div>
-
-                  {/* Star Rating */}
-                  <div className="mb-3">
-                    <label>Rating:</label>
-                    <div className="star-rating">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <FaStar
-                          key={star}
-                          size={24}
-                          style={{ cursor: 'pointer', marginRight: 5 }}
-                          color={star <= rating ? '#ffc107' : '#e4e5e9'}
-                          onClick={() => handleRating(star)}
-                        />
-                      ))}
+      {suggestedProducts.length > 0 && (
+        <div className="suggestions mt-5">
+          <h4 className="text-center mb-4">Related Products</h4>
+          <div className="carousel-container d-flex align-items-center position-relative">
+            <button
+              onClick={handlePrevious}
+              disabled={currentPage === 0}
+              className="btn btn-outline-primary rounded-circle mx-2"
+              style={{ width: "40px", height: "40px" }}
+            >
+              <FaChevronLeft />
+            </button>
+            <div className="row w-100">
+              {suggestedProducts
+                .slice(currentPage * productsPerPage, (currentPage + 1) * productsPerPage)
+                .map((suggestedProduct) => (
+                  <div key={suggestedProduct.id} className="col-md-3 col-sm-6 mb-4">
+                    <div className="card shadow-sm h-100">
+                      <img src={suggestedProduct.image} alt={suggestedProduct.name} className="card-img-top rounded-top" style={{ height: '180px', objectFit: 'cover' }} />
+                      <div className="card-body d-flex flex-column">
+                        <h5 className="card-title text-center">{suggestedProduct.name}</h5>
+                        <p className="card-text text-center text-danger fw-bold">
+                        ₹{suggestedProduct.discountAmount || suggestedProduct.originalAmount}
+                        </p>
+                        <button
+                          className="btn btn-outline-primary mt-auto"
+              onClick={() => handleViewDetails(suggestedProduct.product_id)} // Call function with product ID
+                          >
+                          View Details
+                        </button>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="mb-3">
-                    <textarea
-                      className="form-control"
-                      placeholder="Write your review here..."
-                      rows="4"
-                      value={reviewText}
-                      onChange={(e) => setReviewText(e.target.value)}
-                      required
-                    ></textarea>
-                  </div>
-
-                  <button type="submit" className="btn btn-primary">
-                    Submit Review
-                  </button>
-                </form>
-              </div>
+                ))}
             </div>
-
-            {/* Display Reviews Section */}
-            <div className="col-md-6">
-              <h4>Reviews</h4>
-              {reviews.length > 0 ? (
-                <div className="review-container">
-                  {reviews.map((review, index) => (
-                    <div key={index} className="review-box">
-                      <strong>{review.name}</strong>
-                      <p>{review.experience}</p>
-                      <p>{review.review}</p>
-                      <small>Rating: {review.rating}/5</small>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p>No reviews available yet.</p>
-              )}
-            </div>
-
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages - 1}
+              className="btn btn-outline-primary rounded-circle mx-2"
+              style={{ width: "40px", height: "40px" }}
+            >
+              <FaChevronRight />
+            </button>
           </div>
         </div>
-      </div>
-
+      )}
     </div>
   );
 };
 
 export default ProductDetails;
-
-

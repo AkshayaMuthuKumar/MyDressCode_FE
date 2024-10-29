@@ -267,54 +267,6 @@ const Home = () => {
         )}
       </Container>
 
-
-      <div className="features-section spacious-container" id="about" style={{ backgroundColor: '#7a75c9', height: '480px', paddingTop: '140px', position: 'relative', overflow: 'hidden' }}>
-        {/* Optional background pattern or gradient */}
-        <div className="background-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: '0.1', backgroundImage: 'url(/path/to/pattern.png)' }}></div>
-
-        <Container>
-          <Row className="text-center" data-aos="fade-up">
-            <Col md={4}>
-              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
-                {/* Replace with your actual icon */}
-                <img src="https://via.placeholder.com/80" alt="Free Shipping" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
-                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Free Shipping</h5>
-                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>Enjoy free shipping on all orders above ₹500.</p>
-              </div>
-            </Col>
-
-            <Col md={4}>
-              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
-                {/* Replace with your actual icon */}
-                <img src="https://via.placeholder.com/80" alt="24 Hours Delivery" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
-                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>24 Hours Delivery</h5>
-                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>Guaranteed fast delivery within 24 hours in select locations.</p>
-              </div>
-            </Col>
-
-            <Col md={4}>
-              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
-                {/* Replace with your actual icon */}
-                <img src="https://via.placeholder.com/80" alt="Easy Return" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
-                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Easy Return</h5>
-                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>No-hassle returns within 30 days for all products.</p>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-
-        {/* Hover effects */}
-        <style jsx>{`
-    .feature-item:hover img {
-      transform: scale(1.1);
-    }
-    .feature-item:hover {
-      transform: translateY(-10px);
-    }
-  `}</style>
-      </div>
-
-
       <Container className="my-5 spacious-container" id="shop">
         <h2 className="text-center">Products on Sale</h2>
         <p className="text-center mb-4">When the music’s over, turn off the lights</p>
@@ -391,6 +343,52 @@ const Home = () => {
       </Container>
 
 
+      <div className="features-section spacious-container" id="about" style={{ backgroundColor: '#7a75c9', height: '480px', paddingTop: '140px', position: 'relative', overflow: 'hidden' }}>
+        {/* Optional background pattern or gradient */}
+        <div className="background-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: '0.1', backgroundImage: 'url(/path/to/pattern.png)' }}></div>
+
+        <Container>
+          <Row className="text-center" data-aos="fade-up">
+            <Col md={4}>
+              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
+                {/* Replace with your actual icon */}
+                <img src="https://via.placeholder.com/80" alt="Free Shipping" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
+                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Free Shipping</h5>
+                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>Enjoy free shipping on all orders above ₹500.</p>
+              </div>
+            </Col>
+
+            <Col md={4}>
+              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
+                {/* Replace with your actual icon */}
+                <img src="https://via.placeholder.com/80" alt="24 Hours Delivery" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
+                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>24 Hours Delivery</h5>
+                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>Guaranteed fast delivery within 24 hours in select locations.</p>
+              </div>
+            </Col>
+
+            <Col md={4}>
+              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
+                {/* Replace with your actual icon */}
+                <img src="https://via.placeholder.com/80" alt="Easy Return" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
+                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Easy Return</h5>
+                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>No-hassle returns within 30 days for all products.</p>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+
+        {/* Hover effects */}
+        <style jsx>{`
+    .feature-item:hover img {
+      transform: scale(1.1);
+    }
+    .feature-item:hover {
+      transform: translateY(-10px);
+    }
+  `}</style>
+      </div>
+      
       <Container className="my-5 spacious-container" id="map-section">
         <h2 className="text-center mb-4">VISIT US</h2>
         <p className="text-center mb-4">Find our store location below:</p>

@@ -37,6 +37,11 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
   const isAuthenticated = () => {
     return !!localStorage.getItem("token");  // or sessionStorage
   };
+  const [showModal, setShowModal] = useState(false);
+  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
+
+  const handleModalShow = () => setShowModal(true);
+  const handleModalClose = () => setShowModal(false);
 
   useEffect(() => {
     // Load counts from local storage
@@ -86,11 +91,6 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
   const handleSignupModalShow = () => {
     setShowSignupModal(true);
     setShowLoginModal(false); // Close login if open
-  };
-
-  const handleModalClose = () => {
-    setShowLoginModal(false);
-    setShowSignupModal(false);
   };
 
   const handlePopupMouseEnter = () => {
@@ -168,7 +168,6 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
   }, []);
 
   const handleSubcategoryClick = (category, subcategory) => {
-    console.log("category", category)
     const categoryName = category.category;
     const subcategoryName = subcategory;
     navigate(`/category/${categoryName}?subcategory=${subcategoryName}`);
@@ -252,7 +251,6 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
     }
   };
 
-
   return (
     <>
       <div className="bg-white py-3 shadow-sm fixed-navbar" style={{ top: 0 }}>
@@ -276,15 +274,15 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
           <Button variant="outline-secondary" type="submit">
               <FaSearch />
             </Button>
-          {suggestions.length > 0 && (
-            <ListGroup className="suggestions-dropdown">
-              {suggestions.map((product) => (
-                <ListGroup.Item key={product.id} onClick={() => handleSuggestionClick(product)}>
-                  {product.name}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          )}
+            {suggestions && suggestions.length > 0 && (
+  <ListGroup className="suggestions-dropdown">
+    {suggestions.map((product) => (
+      <ListGroup.Item key={product.id} onClick={() => handleSuggestionClick(product)}>
+        {product.name}
+      </ListGroup.Item>
+    ))}
+  </ListGroup>
+)}
         </Form>
            
 
@@ -296,8 +294,7 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
               <FiLogOut className="ms-4" style={{ cursor: 'pointer' }} onClick={handleLogout} />
             ) : (
               <>
-                <FiLogIn className="ms-4" style={{ cursor: 'pointer' }} onClick={handleLoginModalShow} />
-                <FiUserPlus className="ms-4" style={{ cursor: 'pointer' }} onClick={handleSignupModalShow} />
+                <FiUserPlus className="ms-4" style={{ cursor: 'pointer' }} onClick={handleModalShow} />
               </>
             )}
 
@@ -351,7 +348,7 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
                         />
                         <div className="text-truncate" style={{ maxWidth: '200px' }}>
                           <strong>{item.product_name}</strong>
-                          <div>₹ {Number(item.price).toFixed(2)}</div>
+                          <div>₹{Number(item.discountAmount).toFixed(2)}</div>
                         </div>
                         {/* Remove button */}
                         <button
@@ -392,11 +389,14 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
             >
               <FaShoppingCart />
               {cartItems.length > 0 && (
-                <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                  {/* {cartItems.reduce((acc, item) => acc + item.quantity, 0)} Display total items */}
-                  {new Set(cartItems.map(item => item.product_id)).size}
+                 <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
+                 {cartCount} {/* Display count of unique wishlist items */}
+               </Badge>
+                // <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
+                //   {/* {cartItems.reduce((acc, item) => acc + item.quantity, 0)} Display total items */}
+                //   {new Set(cartItems.map(item => item.product_id)).size}
 
-                </Badge>
+                // </Badge>
               )}
 
               {showCartPopup && (
@@ -470,73 +470,71 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
         </Container>
       </div>
       <Modal
-        show={showLoginModal}
+        show={showModal}
         onHide={handleModalClose}
         centered
-        style={{ backdropFilter: 'blur(5px)' }} // Optional: Add backdrop blur effect
+        style={{ backdropFilter: 'blur(5px)' }}
       >
         <Modal.Header closeButton>
-          <Modal.Title style={{ color: '#6f42c1' }}>Login</Modal.Title>
+          <Modal.Title style={{ color: '#6f42c1' }}>
+            {isLogin ? "Login" : "Signup"}
+          </Modal.Title>
         </Modal.Header>
-
         <Modal.Body style={{ backgroundColor: '#E6E6FA', padding: '40px' }}>
-          {error && <div className="alert alert-danger">{error}</div>}
-          {successMessage && <div className="alert alert-success">{successMessage}</div>}
-          <Form onSubmit={handleLoginSubmit}>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" name="email" placeholder="Enter email" onChange={handleLoginChange} />
-            </Form.Group>
-            <Form.Group controlId="formBasicPhoneNumber">
+          {/* Toggle between Login and Signup forms */}
+          {isLogin ? (
+            <Form onSubmit={handleLoginSubmit}>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control type="email" name="email" placeholder="Enter email" onChange={handleLoginChange} />
+              </Form.Group>
+              <Form.Group controlId="formBasicPhoneNumber">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control type="tel" name="phone_number" placeholder="Enter Phone Number" onChange={handleLoginChange} />
             </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" name="password" placeholder="Password" onChange={handleLoginChange} />
-            </Form.Group>
-            <Button variant="primary" type="submit" style={{ width: '100%', marginTop: '20px' }}>
-              Login
-            </Button>
-          </Form>
-        </Modal.Body>
-
-      </Modal>
-
-      {/* Signup Modal */}
-      <Modal
-        show={showSignupModal}
-        onHide={handleModalClose}
-        centered
-        style={{ backdropFilter: 'blur(5px)' }} // Optional: Add backdrop blur effect
-      >
-        <Modal.Header closeButton>
-          <Modal.Title style={{ color: '#6f42c1' }}>Signup</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ backgroundColor: '#E6E6FA', padding: '40px' }}>
-          {error && <div className="alert alert-danger">{error}</div>}
-          {successMessage && <div className="alert alert-success">{successMessage}</div>}
-          <Form onSubmit={handleSignupSubmit}>
-            <Form.Group controlId="formBasicUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" name="username" placeholder="Enter username" onChange={handleSignupChange} />
-            </Form.Group>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" name="email" placeholder="Enter email" onChange={handleSignupChange} />
-            </Form.Group>
-            <Form.Group controlId="formBasicPhoneNumber">
+              <Form.Group controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="password" name="password" placeholder="Password" onChange={handleLoginChange} />
+              </Form.Group>
+              <Button variant="primary" type="submit" style={{ width: '100%', marginTop: '20px' }}>
+                Login
+              </Button>
+              <p className="text-center mt-3">
+                Don't have an account?{" "}
+                <span style={{ cursor: 'pointer', color: '#6f42c1' }} onClick={() => setIsLogin(false)}>
+                  Sign up here
+                </span>
+              </p>
+            </Form>
+          ) : (
+            <Form onSubmit={handleSignupSubmit}>
+              <Form.Group controlId="formBasicUsername">
+                <Form.Label>Username</Form.Label>
+                <Form.Control type="text" name="username" placeholder="Enter username" onChange={handleSignupChange} />
+              </Form.Group>
+              <Form.Group controlId="formBasicPhoneNumber">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control type="text" name="phone_number" placeholder="Enter phone number" onChange={handleSignupChange} />
             </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" name="password" placeholder="Password" onChange={handleSignupChange} />
-            </Form.Group>
-            <Button variant="primary" type="submit" style={{ width: '100%', marginTop: '20px' }}>
-              Signup
-            </Button>
-          </Form>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control type="email" name="email" placeholder="Enter email" onChange={handleSignupChange} />
+              </Form.Group>
+              <Form.Group controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="password" name="password" placeholder="Password" onChange={handleSignupChange} />
+              </Form.Group>
+              <Button variant="primary" type="submit" style={{ width: '100%', marginTop: '20px' }}>
+                Signup
+              </Button>
+              <p className="text-center mt-3">
+                Already have an account?{" "}
+                <span style={{ cursor: 'pointer', color: '#6f42c1' }} onClick={() => setIsLogin(true)}>
+                  Log in here
+                </span>
+              </p>
+            </Form>
+          )}
         </Modal.Body>
       </Modal>
 

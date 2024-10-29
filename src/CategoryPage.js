@@ -25,8 +25,9 @@ const CategoryPage = () => {
   const [productsPerPage, setProductsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate(); // Hook for navigation
-
+  
   useEffect(() => {
+    
     const fetchProductsByCategory = async () => {
       try {
         const response = await axios.get(
@@ -35,12 +36,20 @@ const CategoryPage = () => {
         const allresponse = await axios.get(
           `${API_URL}/products/getProductsbySelectedCategory`
         );
-  
+        const searchQuery = new URLSearchParams(window.location.search).get('query');
+        const searchResponse = searchQuery
+          ? await axios.get(`${API_URL}/products/search?query=${searchQuery}`)
+          : null;
+
         const productData = Array.isArray(response.data.data) ? response.data.data : [];
+        const searchedProductsData = searchResponse ? Array.isArray(searchResponse.data.data) ? searchResponse.data.data : [] : [];
+
+        const allProducts = [...productData, ...searchedProductsData];
+
         const allproductData = Array.isArray(allresponse.data.data) ? allresponse.data.data : [];
-        const filteredBySubcategory = subcategoryParam 
-      ? productData.filter((product) => product.subcategory === subcategoryParam) 
-      : productData; // If no subcategory, show all products
+        const filteredBySubcategory = subcategoryParam
+        ? allProducts.filter(product => product.subcategory === subcategoryParam)
+        : allProducts;
       
         setFilteredProducts(filteredBySubcategory);
         setProducts(allproductData);
@@ -180,11 +189,11 @@ const CategoryPage = () => {
               <option value="descending">Sort by Name (Z-A)</option>
             </select>
 
-            <select className="form-select w-25" value={productsPerPage} onChange={handleProductsPerPageChange}>
+            {/* <select className="form-select w-25" value={productsPerPage} onChange={handleProductsPerPageChange}>
               <option value={6}>Show 6 per page</option>
               <option value={12}>Show 12 per page</option>
               <option value={18}>Show 18 per page</option>
-            </select>
+            </select> */}
           </div>
 
           <div className="row">

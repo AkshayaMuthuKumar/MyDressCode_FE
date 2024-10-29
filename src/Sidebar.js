@@ -69,7 +69,7 @@ const Sidebar = ({ onFilterChange, selectedFilters }) => {
 
       {/* Price Range Filter */}
       <h5 onClick={() => setOpenFilters({ ...openFilters, price: !openFilters.price })} className="filter-heading" style={{ cursor: 'pointer', margin: '1.5rem 0', color: '#6f42c1' }}>
-        <FaDollarSign className="me-2" /> Price Range
+        <div className="me-2" /><b>₹</b> Price Range
       </h5>
       <Collapse in={openFilters.price}>
         <div className="mb-4">

@@ -54,7 +54,7 @@ function App() {
 
     const fetchCartItems = async () => {
       const token = localStorage.getItem("token");
-
+    
       if (currentUserId && token) {
         try {
           const cartResponse = await axios.get(`${API_URL}/users/${currentUserId}/getUserCart`, {
@@ -63,17 +63,18 @@ function App() {
               "Authorization": `Bearer ${token}`
             }
           });
-          
+    
           const fetchedCartItems = cartResponse.data;
+          console.log("Fetched Cart Items:", fetchedCartItems); // Log response for debugging
           setCartItems(fetchedCartItems);
           localStorage.setItem('cartItems', JSON.stringify(fetchedCartItems));
-          console.log(fetchedCartItems, "Fetched cart Items");
-
+    
         } catch (error) {
           console.error("Error fetching cart items:", error);
         }
       }
     };
+    
 
     if (currentUserId) {
       fetchWishlistItems();
@@ -82,10 +83,12 @@ function App() {
   }, [currentUserId, currentUser]); 
 
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+    
     setCartCount(cartItems.length);
     setWishlistCount(wishlistItems.length);
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
   }, [cartItems, wishlistItems]);
 
   const handleCartUpdate = (item) => {
@@ -96,7 +99,7 @@ function App() {
       }
       return prevCartItems; 
     });
-    setCartCount(cartItems.length + 1); 
+    setCartCount(cartItems.length ); 
   };
 
   const handleWishlistUpdate = () => {
@@ -113,6 +116,7 @@ function App() {
 
   console.log("wishlistItems in App:", wishlistItems);
   console.log ("currentUser app",currentUser?.isAdmin)
+  console.log("cartitems in App:", cartItems);
 
   return (
     <div style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', padding: '20px' }}>

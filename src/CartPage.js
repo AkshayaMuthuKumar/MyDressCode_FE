@@ -1,14 +1,33 @@
-import React from 'react'; 
-import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
+import {React,useState,useContext} from 'react'; 
+import { useParams } from 'react-router-dom';
+
+import { Container, Row, Col, Card, Button, Badge, Modal, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import API_URL from './config';
+import { FaShoppingCart, FaHeart, FaStar } from 'react-icons/fa';
+import { AuthContext } from '../src/UserContext';
 
 const CartPage = ({ cartItems, removeFromCart, currentUser }) => {
+  const { isAuthenticated} = useContext(AuthContext);
+console.log ("cartItems",cartItems)
   const navigate = useNavigate();
+  const { productId } = useParams();
 
   // Calculate total price based on current quantities
   const cartTotal = cartItems.reduce((acc, item) => acc + Number(item.price) * item.quantity, 0);
+  const [reviews, setReviews] = useState([]);
+  const [showAlert, setShowAlert] = useState(false); // Add alert state
+
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewDetails, setReviewDetails] = useState({
+    name: '',
+    email: '',
+    date: '',
+    experience: '',
+    rating: 0,
+    text: ''
+  });
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement('script');
@@ -18,62 +37,70 @@ const CartPage = ({ cartItems, removeFromCart, currentUser }) => {
       document.body.appendChild(script);
     });
   };
-  // Function to handle checkout and open Razorpay
-  const handleCheckout = async () => {
+ 
 
+  const handleCheckout = async () => {
+    if (!isAuthenticated) {
+      setShowAlert(true);
+    } 
+    
     const isScriptLoaded = await loadRazorpayScript();
-  
     if (!isScriptLoaded) {
-      alert('Razorpay SDK failed to load. Are you online?');
+      alert('Razorpay SDK failed to load. Please try again.');
       return;
     }
 
-    const amount = cartTotal; // Total amount to be paid
-    const currency = 'INR'; // Currency code
-
     try {
-      // Create order in backend
-      const response = await axios.post('http://localhost:5000/create-order', {
-        amount,
-        currency,
-      });
-
-      const { key_id } = response.data; // Get Razorpay key id
+      const response = await axios.post(`${API_URL}/create-order`, { amount: cartTotal, currency: 'INR' });
       const options = {
-        key: key_id,
+        key: response.data.key_id,
         amount: response.data.amount,
         currency: response.data.currency,
-        name: 'Your Company Name',
-        description: 'Test Transaction',
-        order_id: response.data.id, // Order ID from Razorpay
-        handler: function (response) {
-          alert(`Payment Successful: ${response.razorpay_payment_id}`);
-          // Here you can call your backend to save the payment info
-        },
-        prefill: {
-          name: currentUser.username, // Use current user's name
-          email: currentUser.email, // Use current user's email
-          contact: currentUser.phone_number, // Use current user's phone number
-        },
-        notes: {
-          address: 'Customer Address',
-        },
-        theme: {
-          color: '#F37254',
+        order_id: response.data.id,
+        handler: () => {
+          alert('Payment Successful!');
+          setShowReviewModal(true); // Open review modal after successful payment
         },
       };
 
       const razorpay = new window.Razorpay(options);
-      razorpay.open(); // Open Razorpay modal
+      razorpay.open();
     } catch (error) {
       console.error('Error creating order:', error);
-      alert('Failed to create order. Please try again.');
+      alert('Failed to create order.');
+    }
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post(`${API_URL}/products/addReview`, {
+        productId,
+        ...reviewDetails
+      });
+      alert('Review submitted successfully!');
+      setShowReviewModal(false);
+    } catch (error) {
+      console.error('Error submitting review:', error);
     }
   };
 
   return (
+    <>
     <Container className="py-4 mt-5">
       <h1 className="text-center mb-4">YOUR SHOPPING CART</h1>
+      {showAlert && (
+        <div className="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>Please login to proceed with the checkout!</strong>
+          <button
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => setShowAlert(false)} // Close the alert
+          ></button>
+        </div>
+      )}
       <Row>
         {cartItems.length > 0 ? (
           cartItems.map((item) => (
@@ -97,7 +124,7 @@ const CartPage = ({ cartItems, removeFromCart, currentUser }) => {
                   objectFit: 'cover', // Ensures the image covers the area without distortion
                 }}/>
                 <Card.Body>
-                  <Card.Title>{item.product_name}</Card.Title>
+                  <Card.Title>{item.name}</Card.Title>
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
                       <Card.Text>
@@ -134,6 +161,69 @@ const CartPage = ({ cartItems, removeFromCart, currentUser }) => {
         </div>
       )}
     </Container>
+
+<Modal show={showReviewModal} onHide={() => setShowReviewModal(false)} centered>
+<Modal.Header closeButton>
+  <Modal.Title>Submit Your Review</Modal.Title>
+</Modal.Header>
+<Modal.Body>
+  <Form onSubmit={handleReviewSubmit}>
+    <Form.Group className="mb-3">
+      <Form.Label>Your Name</Form.Label>
+      <Form.Control
+        type="text"
+        value={reviewDetails.name}
+        onChange={(e) => setReviewDetails({ ...reviewDetails, name: e.target.value })}
+        required
+      />
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Email</Form.Label>
+      <Form.Control
+        type="email"
+        value={reviewDetails.email}
+        onChange={(e) => setReviewDetails({ ...reviewDetails, email: e.target.value })}
+        required
+      />
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Purchase Date</Form.Label>
+      <Form.Control
+        type="date"
+        value={reviewDetails.date}
+        onChange={(e) => setReviewDetails({ ...reviewDetails, date: e.target.value })}
+        required
+      />
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Rating</Form.Label>
+      <div className="d-flex">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <FaStar
+            key={star}
+            size={24}
+            style={{ cursor: 'pointer', marginRight: 5 }}
+            color={star <= reviewDetails.rating ? '#ffc107' : '#e4e5e9'}
+            onClick={() => setReviewDetails({ ...reviewDetails, rating: star })}
+          />
+        ))}
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3">
+      <Form.Label>Review</Form.Label>
+      <Form.Control
+        as="textarea"
+        rows={4}
+        value={reviewDetails.text}
+        onChange={(e) => setReviewDetails({ ...reviewDetails, text: e.target.value })}
+        required
+      />
+    </Form.Group>
+    <Button type="submit" variant="primary">Submit Review</Button>
+  </Form>
+</Modal.Body>
+</Modal>
+</>
   );
 };
 
