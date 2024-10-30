@@ -135,7 +135,7 @@ const CategoryForm = () => {
     }
   };
 
-  const handleCategorySubmit = async (e) => {
+ const handleCategorySubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(); // Create a FormData object
     formData.append('category', category);
@@ -146,7 +146,7 @@ const CategoryForm = () => {
       formData.append('image', image); // Append the image file
     }
     try {
-      await axios.post(`${API_URL}/products/addCategory`, formData, {
+      const response = await axios.post(`${API_URL}/products/addCategory`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data', // Specify the content type
         },
@@ -158,10 +158,11 @@ const CategoryForm = () => {
       alert('Category added successfully!');
       window.location.reload(); // Refresh the page after submission
     } catch (error) {
-      console.error(error);
-      alert('Error adding category');
+      console.error('Error details:', error.response?.data || error.message);
+      alert('Error adding category: ' + (error.response?.data.message || error.message));
     }
-  };
+};
+
 
   const handleProductSubmit = async (e) => {
     e.preventDefault();

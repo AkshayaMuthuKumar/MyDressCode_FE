@@ -9,6 +9,9 @@ import { useUser } from './UserContext'; // Adjust the path
 import API_URL from './config';
 
 const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems, isAdmin, wishlistCount, cartCount }) => {
+
+  console.log ("wishlist items nav", wishlistItems)
+
   const navigate = useNavigate();
   console.log("cartItems", cartItems)
   const [showWishlistPopup, setShowWishlistPopup] = useState(false);
@@ -251,6 +254,7 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
     }
   };
 
+
   return (
     <>
       <div className="bg-white py-3 shadow-sm fixed-navbar" style={{ top: 0 }}>
@@ -277,10 +281,10 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
             {suggestions && suggestions.length > 0 && (
   <ListGroup className="suggestions-dropdown">
     {suggestions.map((product) => (
-      <ListGroup.Item key={product.id} onClick={() => handleSuggestionClick(product)}>
-        {product.name}
-      </ListGroup.Item>
-    ))}
+  <ListGroup.Item key={product.id} onClick={() => handleSuggestionClick(product)}>
+    {product.name}
+  </ListGroup.Item>
+))}
   </ListGroup>
 )}
         </Form>
@@ -330,12 +334,10 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
                   }}
                 >
                   {wishlistCount > 0 ? (
-                    wishlistItems.map(item => (
-                      <div
-                        key={item.product_id} // Use unique ID for each item
-                        className="d-flex align-items-center mb-2 position-relative"
-                        style={{ overflow: 'hidden' }}
-                      >
+wishlistItems.map((item, index) => (
+  <div key={item.product_id || index} className="d-flex align-items-center mb-2 position-relative" style={{ overflow: 'hidden' }}>
+                        
+                    
                         <img
                           src={item.image} // Assuming item has an image property
                           alt={item.product_name}
@@ -348,7 +350,7 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
                         />
                         <div className="text-truncate" style={{ maxWidth: '200px' }}>
                           <strong>{item.product_name}</strong>
-                          <div>₹{Number(item.discountAmount).toFixed(2)}</div>
+                          <div>₹{Number(item.price).toFixed(2)}</div>
                         </div>
                         {/* Remove button */}
                         <button
