@@ -232,11 +232,11 @@ const CategoryForm = () => {
     <div className="container mt-5">
       <div className="row">
         {/* Category Form */}
-        <div className="col-md-6">
+        <div className="col-12 col-md-6 mb-4">
           <div className="border rounded p-4 shadow-sm">
             <h2 className="text-center mb-4">Add Category</h2>
             <form onSubmit={handleCategorySubmit}>
-              <div className="form-group">
+              <div className="form-group mb-3">
                 <label htmlFor="category">Category:</label>
                 <input
                   type="text"
@@ -261,7 +261,7 @@ const CategoryForm = () => {
                   </ul>
                 )}
               </div>
-              <div className="form-group">
+              <div className="form-group mb-3">
                 <label htmlFor="subcategory">Subcategory:</label>
                 <input
                   type="text"
@@ -286,7 +286,7 @@ const CategoryForm = () => {
                   </ul>
                 )}
               </div>
-              <div className="form-group">
+              <div className="form-group mb-3">
                 <label htmlFor="discount">Discount:</label>
                 <input
                   type="number"
@@ -297,7 +297,7 @@ const CategoryForm = () => {
                   required
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group mb-3">
                 <label htmlFor="image">Image:</label>
                 <input
                   type="file"
@@ -306,153 +306,169 @@ const CategoryForm = () => {
                   onChange={(e) => setImage(e.target.files[0])}
                 />
               </div>
-              <button type="submit" className="btn btn-primary btn-block">Add Category</button>
+              <button type="submit" className="btn btn-primary w-100">Add Category</button>
             </form>
           </div>
         </div>
-
+  
         {/* Product Form */}
-        <div className="col-md-6">
-          <div className="border rounded p-4 shadow-sm">
-            <h2 className="text-center mb-4">Add Product</h2>
-            <form onSubmit={handleProductSubmit}>
-              <div className="form-group">
-                <label htmlFor="productName">Product Name:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="productName"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  required
-                  autoComplete="off"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="productSubcategory">Subcategory:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="productSubcategory"
-                  value={productSubcategory}
-                  onChange={handleProductSubcategoryChange}
-                  required
-                  autoComplete="off"
-                />
-                {productFilteredSubcategories.length > 0 && (
-                  <ul className="list-group">
-                    {productFilteredSubcategories.map((sub, index) => (
-                      <li
-                        key={index}
-                        className="list-group-item list-group-item-action"
-                        onClick={() => handleProductSubcategorySelect(sub)}
-                      >
-                        {sub}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-              <div className="form-group">
-                <label htmlFor="categoryId">Category ID:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="categoryId"
-                  value={categoryId}
-                  readOnly
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="size">Size:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="size"
-                  value={size}
-                  onChange={(e) => setSize(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="brand">Brand:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="brand"
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="originalAmount">Original Amount:</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="originalAmount"
-                  value={originalAmount}
-                  onChange={(e) => setOriginalAmount(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="discountAmount">Discount Amount:</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="discountAmount"
-                  value={discountAmount}
-                  onChange={(e) => setDiscountAmount(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="stock">Stock:</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="stock"
-                  value={stock}
-                  onChange={(e) => setStock(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="description">Description:</label>
-                <textarea
-                  className="form-control"
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows="3"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="productImage">Image:</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  id="productImage"
-                  onChange={(e) => setImage(e.target.files[0])}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary btn-block">Add Product</button>
-            </form>
-          </div>
+        <div className="col-12 col-md-6 mb-4">
+  <div className="border rounded p-4 shadow-sm">
+    <h2 className="text-center mb-4">Add Product</h2>
+    <form onSubmit={handleProductSubmit}>
+      <div className="row">
+        <div className="form-group mb-3 col-12 col-md-6">
+          <label htmlFor="productName">Product Name:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="productName"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+            required
+            autoComplete="off"
+          />
+        </div>
+        <div className="form-group mb-3 col-12 col-md-6">
+          <label htmlFor="productSubcategory">Subcategory:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="productSubcategory"
+            value={productSubcategory}
+            onChange={handleProductSubcategoryChange}
+            required
+            autoComplete="off"
+          />
+          {productFilteredSubcategories.length > 0 && (
+            <ul className="list-group">
+              {productFilteredSubcategories.map((sub, index) => (
+                <li
+                  key={index}
+                  className="list-group-item list-group-item-action"
+                  onClick={() => handleProductSubcategorySelect(sub)}
+                >
+                  {sub}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
 
+      <div className="row">
+        <div className="form-group mb-3 col-12 col-md-6">
+          <label htmlFor="categoryId">Category ID:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="categoryId"
+            value={categoryId}
+            readOnly
+          />
+        </div>
+        <div className="form-group mb-3 col-12 col-md-6">
+          <label htmlFor="size">Size:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="size"
+            value={size}
+            onChange={(e) => setSize(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="form-group mb-3 col-12 col-md-6">
+          <label htmlFor="brand">Brand:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="brand"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+          />
+        </div>
+        <div className="form-group mb-3 col-12 col-md-6">
+          <label htmlFor="originalAmount">Original Amount:</label>
+          <input
+            type="number"
+            className="form-control"
+            id="originalAmount"
+            value={originalAmount}
+            onChange={(e) => setOriginalAmount(e.target.value)}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="form-group mb-3 col-12 col-md-6">
+          <label htmlFor="discountAmount">Discount Amount:</label>
+          <input
+            type="number"
+            className="form-control"
+            id="discountAmount"
+            value={discountAmount}
+            onChange={(e) => setDiscountAmount(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group mb-3 col-12 col-md-6">
+          <label htmlFor="stock">Stock:</label>
+          <input
+            type="number"
+            className="form-control"
+            id="stock"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="form-group mb-3">
+        <label htmlFor="description">Description:</label>
+        <textarea
+          className="form-control"
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows="3"
+        />
+      </div>
+      
+      <div className="form-group mb-3">
+        <label htmlFor="productImage">Image:</label>
+        <input
+          type="file"
+          className="form-control"
+          id="productImage"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+      </div>
+      
+      <button type="submit" className="btn btn-primary btn-block">Add Product</button>
+    </form>              
+  </div>
+</div>
+
+      </div>
+  
+      {/* Users List */}
       <div className="mt-4">
         <h2 className="text-center">Users List</h2>
         <ul className="list-group">
           {currentUsers.map((user) => (
-            <li key={user.id} className="list-group-item">
+            <li key={user.id} className="list-group-item d-flex justify-content-between align-items-center">
               <div>
-             <strong>{user.username}</strong>
-             <div>{user.email}</div>
-             <div>{user.phone_number}</div>
-           </div>
+                <strong>{user.username}</strong>
+                <div>{user.email}</div>
+                <div>{user.phone_number}</div>
+              </div>
               <button
-                className="btn btn-secondary btn-sm float-right"
+                className="btn btn-secondary btn-sm"
                 onClick={() => handleUpdateRole(user.id, user.isAdmin)}
               >
                 {user.isAdmin ? 'Remove Admin' : 'Make Admin'}
@@ -460,9 +476,9 @@ const CategoryForm = () => {
             </li>
           ))}
         </ul>
-
+  
         {/* Pagination Controls */}
-        <div className="d-flex justify-content-between mt-3">
+        <div className="d-flex justify-content-between align-items-center mt-3">
           <button
             className="btn btn-secondary"
             onClick={handlePrevPage}
@@ -484,6 +500,7 @@ const CategoryForm = () => {
       </div>
     </div>
   );
+  
 };
 
 export default CategoryForm;

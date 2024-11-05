@@ -132,10 +132,11 @@ const Home = () => {
   };
 
   const renderRecentProducts = () => {
+    
     return (
       <Row className="justify-content-center">
         {products.recent.map((product) => (
-          <Col xs={6} md={6} lg={2} key={product.id} className="mb-4">
+          <Col xs={12} sm={6} md={4} lg={3} xl={2} key={product.id} className="mb-4">
             <Link to={`/product/${product.product_id}`} style={{ textDecoration: 'none' }}>
               <Card style={{
                 border: '1px solid #e0e0e0',
@@ -150,12 +151,27 @@ const Home = () => {
                   variant="top"
                   src={product.image}
                   alt={product.name}
-                  style={{ borderRadius: '10px', height: '200px', objectFit: 'cover', width: '100%' }}
+                  style={{
+                    borderRadius: '10px',
+                    height: '180px',
+                    objectFit: 'cover',
+                    width: '100%',
+                    transition: 'transform 0.3s',
+                  }}
+                  className="product-image"
                 />
                 <Card.Body className="text-center">
-                  <b><h5 className="card-title" style={{ fontSize: '12px', fontWeight: 'bold' }}>{product.name.toUpperCase()}</h5></b>
+                  <h5 className="card-title" style={{
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}>
+                    {product.name.toUpperCase()}
+                  </h5>
                   <div className="price" style={{ fontSize: '15px', color: '#6f42c1' }}>
-                  ₹ {product.discountAmount}
+                    ₹ {product.discountAmount}<br/>
                     <span style={{ textDecoration: 'line-through', marginLeft: '5px', fontSize: '13px', color: '#999' }}>
                       ₹ {product.originalAmount}
                     </span>
@@ -170,6 +186,7 @@ const Home = () => {
         ))}
       </Row>
     );
+    
   };
   const itemsPerSlide = 4; // Number of images per slide
 
@@ -182,7 +199,6 @@ const Home = () => {
   };
   return (
     <div>
-
 
       <Carousel className="spacious-container">
         <Carousel.Item>
@@ -231,7 +247,7 @@ const Home = () => {
 
       <Container className="my-4 spacious-container" id="collections" style={{ backgroundColor: "white", height: "450px" }}>
         <br></br>
-        <h2 className="text-center mt-4 mb-4">SEASON WEAR</h2>
+        <h2 className="text-center mt-2 mb-4">SEASON WEAR</h2>
         <p className="text-center mb-5" style={{ fontSize: "18px" }}>TOP CATEGORIES</p>
 
         {/* Categories Carousel */}
@@ -241,10 +257,9 @@ const Home = () => {
             <Carousel indicators={false} controls={false} interval={null} activeIndex={0}>
               <Carousel.Item>
                 <Row className="justify-content-center">
-                  {topCategories
-                    .slice(currentIndex, currentIndex + itemsPerSlide)
-                    .map((category, index) => (
-                      <Col md={3} sm={6} className="mb-4" data-aos="fade-up" key={index}>
+                {topCategories.slice(currentIndex, currentIndex + itemsPerSlide).map((category, index) => (
+                    
+                    <Col lg={3} md={4} sm={6} xs={12} className="mb-4" data-aos="fade-up" key={index}>
                         <Card className="category-card h-100" onClick={() => handleCardClick(category)}>
                           <div className="category-image-wrapper">
                             <Card.Img variant="top" src={category.image} alt={category.name} className="category-image" />

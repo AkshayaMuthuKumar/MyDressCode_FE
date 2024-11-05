@@ -175,10 +175,6 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
     }
 
   };
-  
-  
-
-
 
   const handleSizeChange = (size) => {
     setSelectedSize(size);

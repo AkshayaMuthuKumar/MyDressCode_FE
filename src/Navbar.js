@@ -259,220 +259,205 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
 
     <>
     
-      <div className="bg-white py-3 shadow-sm fixed-navbar" style={{ top: 0 }}>
-        <Container className="d-flex justify-content-between align-items-center ">
-        <Navbar.Brand onClick={() => navigate('/MyDressCode_FE')} style={{ cursor: 'pointer' }}>
-    <img src="images/mydresscodelogo.png" alt="MyDressCode" width="180" height="60" />
-</Navbar.Brand>
+    <div className="bg-white py-3 shadow-sm fixed-top">
+  <Container className="d-flex justify-content-between align-items-center">
+    <Navbar.Brand onClick={() => navigate('/MyDressCode_FE')} style={{ cursor: 'pointer' }}>
+      <img src="images/mydresscodelogo.png" alt="MyDressCode" width="180" height="60" />
+    </Navbar.Brand>
 
-         
-          <Form className="d-flex w-50" onSubmit={handleSearchSubmit}>
-          <FormControl
-              type="search"
-              placeholder="Type to search i.e. 'sunglass'..."
-              className="me-2"
-            value={searchQuery}
-            onChange={handleInputChange}
-            aria-label="Search"
+    {/* Search Form - visible only on larger screens */}
+    <Form className="d-none d-md-flex w-50" onSubmit={handleSearchSubmit}>
+      <FormControl
+        type="search"
+        placeholder="Type to search i.e. 'sunglass'..."
+        className="me-2"
+        value={searchQuery}
+        onChange={handleInputChange}
+        aria-label="Search"
+      />
+      <Button variant="outline-secondary" type="submit">
+        <FaSearch />
+      </Button>
+      {suggestions && suggestions.length > 0 && (
+        <ListGroup className="suggestions-dropdown position-absolute w-50">
+          {suggestions.map((product) => (
+            <ListGroup.Item key={product.id} onClick={() => handleSuggestionClick(product)}>
+              {product.name}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
+    </Form>
 
-          />
-        
-          <Button variant="outline-secondary" type="submit">
-              <FaSearch />
-            </Button>
-            {suggestions && suggestions.length > 0 && (
-  <ListGroup className="suggestions-dropdown">
-    {suggestions.map((product) => (
-  <ListGroup.Item key={product.id} onClick={() => handleSuggestionClick(product)}>
-    {product.name}
-  </ListGroup.Item>
-))}
-  </ListGroup>
-)}
-        </Form>
-           
+    <div className="d-flex align-items-center">
+      <span className="ms-4"> Hello, {currentUser ? currentUser.username : "Guest"}!</span>
 
-          <div className="d-flex align-items-center">
+      {currentUser ? (
+        <FiLogOut className="ms-4" style={{ cursor: 'pointer' }} onClick={handleLogout} />
+      ) : (
+        <FiUserPlus className="ms-4" style={{ cursor: 'pointer' }} onClick={handleModalShow} />
+      )}
 
-            <span className="ms-4"> Hello, {currentUser ? currentUser.username : "Guest"}!</span>
-
-            {currentUser ? (
-              <FiLogOut className="ms-4" style={{ cursor: 'pointer' }} onClick={handleLogout} />
+      {/* Wishlist Popup */}
+      <Nav.Link
+        className="text-dark ms-4 position-relative"
+        onMouseEnter={handleWishlistMouseEnter}
+        onMouseLeave={handleWishlistMouseLeave}
+        onClick={() => navigate('/wishlist')}
+        style={{ cursor: 'pointer' }}
+      >
+        <FaHeart />
+        {wishlistCount > 0 && (
+          <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
+            {wishlistCount} {/* Display count of unique wishlist items */}
+          </Badge>
+        )}
+        {/* Wishlist Popup */}
+        {showWishlistPopup && (
+          <div
+            className="wishlist-popup position-absolute"
+            onMouseEnter={handlePopupMouseEnter}
+            onMouseLeave={handleWishlistMouseLeave}
+            style={{
+              top: '100%', left: '0px', width: '300px', backgroundColor: '#fff', boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+              padding: '10px',
+              zIndex: 12,
+              overflowY: 'auto',
+              maxHeight: '250px',
+              overflowX: 'hidden',
+              transform: 'translateX(-100%)',
+            }}
+          >
+            {wishlistCount > 0 ? (
+              wishlistItems.map((item, index) => (
+                <div key={item.product_id || index} className="d-flex align-items-center mb-2 position-relative" style={{ overflow: 'hidden' }}>
+                  <img
+                    src={item.image} // Assuming item has an image property
+                    alt={item.product_name}
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      objectFit: 'cover',
+                      marginRight: '10px'
+                    }}
+                  />
+                  <div className="text-truncate" style={{ maxWidth: '200px' }}>
+                    <strong>{item.product_name}</strong>
+                    <div>₹{Number(item.price).toFixed(2)}</div>
+                  </div>
+                  {/* Remove button */}
+                  <button
+                    onClick={() => removeFromWishlist(item.product_id)} // Use unique ID for removal
+                    className="position-absolute top-0 end-0 btn btn-sm"
+                    style={{ background: 'transparent', border: 'none', fontSize: '18px', cursor: 'pointer' }}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))
             ) : (
+              <div>No items in wishlist</div>
+            )}
+            {wishlistCount > 0 && (
+              <div className="text-center mt-2">
+                <button onClick={() => {
+                  console.log("View button clicked!"); // Log when the button is clicked
+                  navigate('/wishlist'); // Navigate to the wishlist page
+                }}>
+                  <i className="fas fa-eye"></i>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </Nav.Link>
+
+      {/* Cart Popup */}
+      <Nav.Link
+        className="text-dark ms-4 position-relative"
+        onMouseEnter={handleCartMouseEnter}
+        onMouseLeave={handleCartMouseLeave}
+        onClick={() => navigate('/cart')}
+        style={{ cursor: 'pointer' }}
+      >
+        <FaShoppingCart />
+        {cartItems.length > 0 && (
+          <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
+            {cartCount} {/* Display count of unique cart items */}
+          </Badge>
+        )}
+        {showCartPopup && (
+          <div
+            className="cart-popup position-absolute"
+            onMouseEnter={handlePopupMouseEnter}
+            onMouseLeave={handleCartMouseLeave}
+            style={{
+              top: '100%',
+              left: '0px',
+              width: '300px',
+              backgroundColor: '#fff',
+              boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+              padding: '10px',
+              zIndex: 12,
+              overflowY: 'auto',
+              maxHeight: '250px',
+              overflowX: 'hidden',
+              transform: 'translateX(-100%)',
+            }}
+          >
+            {cartItems.length > 0 ? (
+              cartItems.map(item => (
+                <div key={item.product_id} className="d-flex align-items-center mb-2 position-relative">
+                  <img
+                    src={item.image}
+                    alt={item.product_name}
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      objectFit: 'cover',
+                      marginRight: '10px'
+                    }}
+                  />
+                  <div className="text-truncate" style={{ maxWidth: '200px' }}>
+                    <strong>{item.product_name}</strong>
+                    <div>₹ {Number(item.price).toFixed(2)} x {item.quantity}</div>
+                  </div>
+                  {/* Remove button */}
+                  <button
+                    onClick={() => removeFromCart(item.product_id)}
+                    className="position-absolute top-0 end-0 btn btn-sm"
+                    style={{ background: 'transparent', border: 'none', fontSize: '18px', cursor: 'pointer' }}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div>No items in cart</div>
+            )}
+            {cartItems.length > 0 && (
               <>
-                <FiUserPlus className="ms-4" style={{ cursor: 'pointer' }} onClick={handleModalShow} />
+                <div className="fw-bold text-right">
+                  Subtotal: ₹{cartTotal.toFixed(2)}
+                </div>
+                <div className="text-center mt-2">
+                  <Button
+                    variant="primary"
+                    onClick={() => navigate('/cart')}
+                  >
+                    Checkout
+                  </Button>
+                </div>
               </>
             )}
-
-            {/* Wishlist Popup */}
-            <Nav.Link
-              className="text-dark ms-4 position-relative"
-              onMouseEnter={handleWishlistMouseEnter}
-              onMouseLeave={handleWishlistMouseLeave}
-              onClick={() => navigate('/wishlist')}
-              style={{ cursor: 'pointer' }}
-            >
-              <FaHeart />
-              {wishlistCount > 0 && (
-                <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                  {wishlistCount} {/* Display count of unique wishlist items */}
-                </Badge>
-              )}
-
-              {/* Wishlist Popup */}
-              {showWishlistPopup && (
-                <div
-                  className="wishlist-popup position-absolute"
-                  onMouseEnter={handlePopupMouseEnter}
-                  onMouseLeave={handleWishlistMouseLeave}
-                  style={{
-                    top: '100%', left: '0px', width: '300px', backgroundColor: '#fff', boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
-                    padding: '10px',
-                    zIndex: 12,
-                    overflowY: 'auto',
-                    maxHeight: '250px',
-                    overflowX: 'hidden',
-                    transform: 'translateX(-100%)',
-                  }}
-                >
-                  {wishlistCount > 0 ? (
-wishlistItems.map((item, index) => (
-  <div key={item.product_id || index} className="d-flex align-items-center mb-2 position-relative" style={{ overflow: 'hidden' }}>
-                        
-                    
-                        <img
-                          src={item.image} // Assuming item has an image property
-                          alt={item.product_name}
-                          style={{
-                            width: '50px',
-                            height: '50px',
-                            objectFit: 'cover',
-                            marginRight: '10px'
-                          }}
-                        />
-                        <div className="text-truncate" style={{ maxWidth: '200px' }}>
-                          <strong>{item.product_name}</strong>
-                          <div>₹{Number(item.price).toFixed(2)}</div>
-                        </div>
-                        {/* Remove button */}
-                        <button
-                          onClick={() => removeFromWishlist(item.product_id)} // Use unique ID for removal
-                          className="position-absolute top-0 end-0 btn btn-sm"
-                          style={{ background: 'transparent', border: 'none', fontSize: '18px', cursor: 'pointer' }}
-                        >
-                          &times;
-                        </button>
-                      </div>
-                    ))
-                  ) : (
-                    <div>No items in wishlist</div>
-                  )}
-                  {wishlistCount > 0 && (
-                    <div className="text-center mt-2">
-                                           <button onClick={() => {
-                                                console.log("View button clicked!"); // Log when the button is clicked
-                                                navigate('/wishlist'); // Navigate to the wishlist page
-                                              }}>  <i className="fas fa-eye"
-                                              ></i> </button> 
-
-
-                    </div>
-                  )}
-                </div>
-              )}
-            </Nav.Link>
-
-
-            {/* Cart Popup */}
-            <Nav.Link
-              className="text-dark ms-4 position-relative"
-              onMouseEnter={handleCartMouseEnter}
-              onMouseLeave={handleCartMouseLeave}
-              onClick={() => navigate('/cart')}
-              style={{ cursor: 'pointer' }}
-            >
-              <FaShoppingCart />
-              {cartItems.length > 0 && (
-                 <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                 {cartCount} {/* Display count of unique wishlist items */}
-               </Badge>
-                // <Badge pill bg="danger" className="position-absolute top-0 start-100 translate-middle">
-                //   {/* {cartItems.reduce((acc, item) => acc + item.quantity, 0)} Display total items */}
-                //   {new Set(cartItems.map(item => item.product_id)).size}
-
-                // </Badge>
-              )}
-
-              {showCartPopup && (
-                <div
-                  className="cart-popup position-absolute"
-                  onMouseEnter={handlePopupMouseEnter}
-                  onMouseLeave={handleCartMouseLeave}
-                  style={{
-                    top: '100%',
-                    left: '0px',
-                    width: '300px',
-                    backgroundColor: '#fff',
-                    boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
-                    padding: '10px',
-                    zIndex: 12,
-                    overflowY: 'auto',
-                    maxHeight: '250px',
-                    overflowX: 'hidden',
-                    transform: 'translateX(-100%)',
-                  }}
-                >
-                  {cartItems.length > 0 ? (
-                    cartItems.map(item => (
-                      <div key={item.product_id} className="d-flex align-items-center mb-2 position-relative">
-                        <img
-                          src={item.image}
-                          alt={item.product_name}
-                          style={{
-                            width: '50px',
-                            height: '50px',
-                            objectFit: 'cover',
-                            marginRight: '10px'
-                          }}
-                        />
-                        <div className="text-truncate" style={{ maxWidth: '200px' }}>
-                          <strong>{item.product_name}</strong>
-                          <div>₹ {Number(item.price).toFixed(2)} x {item.quantity}</div>
-                        </div>
-                        {/* Remove button */}
-                        <button
-                          onClick={() => removeFromCart(item.product_id)}
-                          className="position-absolute top-0 end-0 btn btn-sm"
-                          style={{ background: 'transparent', border: 'none', fontSize: '18px', cursor: 'pointer' }}
-                        >
-                          &times;
-                        </button>
-                      </div>
-                    ))
-                  ) : (
-                    <div>No items in cart</div>
-                  )}
-                  {cartItems.length > 0 && (
-                    <>
-                      <div className="fw-bold text-right">
-                        Subtotal: ${cartTotal.toFixed(2)}
-                      </div>
-                      <div className="text-center mt-2">
-                        <Button
-                          variant="primary"
-                          onClick={() => navigate('/cart')}
-                        >
-                          Checkout
-                        </Button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-            </Nav.Link>
           </div>
-        </Container>
-      </div>
+        )}
+      </Nav.Link>
+    </div>
+  </Container>
+</div>
+
+      
       <Modal
         show={showModal}
         onHide={handleModalClose}
@@ -551,100 +536,106 @@ wishlistItems.map((item, index) => (
       <Navbar
   expand="md"
   className="fixed-anothernav d-flex justify-content-center"
-  style={{ backgroundColor: '#7a75c9', width: '100%', borderRadius: '0', color: 'white', paddingTop: '0px' }}
+  style={{
+    backgroundColor: '#7a75c9',
+    width: '100%',
+    borderRadius: '0',
+    color: 'white',
+    paddingTop: '0px',
+  }}
 >
-<Container>
-  <Navbar.Toggle aria-controls="basic-navbar-nav" />
-  <Navbar.Collapse id="basic-navbar-nav">
-    <Nav className="me-auto" style={{ marginLeft: '-50px'}}>
-      {/* Home link */}
-      <Nav.Link as={Link} to="#home" style={{ color: 'white', fontWeight: 'bold', marginRight: '2px' }} className="nav-item">
-        Home
-      </Nav.Link>
-      <Nav.Link 
-  as={Link} 
-  to="/category/just-arrived" 
-  style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }} 
-  className="nav-item">
-  Just Arrived!
-</Nav.Link>
-
-      {categories.map((categoryObj, index) => (
-        <NavDropdown
-          key={index}
-          title={<span style={{ color: 'white', fontWeight: 'bold', marginRight: '20px' }}>{categoryObj.category}</span>}
-          id={`category-dropdown-${index}`}
-          className="nav-item"
-        >
-          <div
-            style={{
-              maxHeight: '300px', // Max height to prevent the dropdown from getting too large
-              overflowY: 'auto', // Enable scrolling when the content exceeds max height
-            }}
-          >
-            {categoryObj.subcategories.map((subcategory, subIndex) => (
-              <NavDropdown.Item
-                key={subIndex}
-                onClick={() => handleSubcategoryClick(categoryObj, subcategory)}
-                style={{ color: 'black', fontWeight: 'normal' }}
-              >
-                {subcategory}
-              </NavDropdown.Item>
-            ))}
-          </div>
-        </NavDropdown>
-      ))}
-
-      {isAdmin && (
-        <Nav.Link
-        className="nav-item"
-          onClick={() => navigate('/add-category')}
-          style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }} 
-          >
-          To Add
+  <Container>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="me-auto d-flex justify-content-center flex-wrap">
+        {/* Home link */}
+        <Nav.Link as={Link} to="#home" style={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }} className="nav-item">
+          Home
         </Nav.Link>
-      )}
-    </Nav>
+        <Nav.Link 
+          as={Link} 
+          to="/category/just-arrived" 
+          style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap', marginRight: '10px' }} 
+          className="nav-item">
+          Just Arrived!
+        </Nav.Link>
 
-    {/* Help & Support Link moved here */}
-    <Nav className="ms-0">
-    <Nav.Link
-  style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }} 
-  onClick={handleShow}
-      >
-        <FaHeadphonesAlt /> Help & Support
-      </Nav.Link>
-    </Nav>
+        {categories.map((categoryObj, index) => (
+          <NavDropdown
+            key={index}
+            title={<span style={{ color: 'white', fontWeight: 'bold', marginRight: '20px' }}>{categoryObj.category}</span>}
+            id={`category-dropdown-${index}`}
+            className="nav-item"
+          >
+            <div
+              style={{
+                maxHeight: '300px', // Max height to prevent the dropdown from getting too large
+                overflowY: 'auto', // Enable scrolling when the content exceeds max height
+              }}
+            >
+              {categoryObj.subcategories.map((subcategory, subIndex) => (
+                <NavDropdown.Item
+                  key={subIndex}
+                  onClick={() => handleSubcategoryClick(categoryObj, subcategory)}
+                  style={{ color: 'black', fontWeight: 'normal' }}
+                >
+                  {subcategory}
+                </NavDropdown.Item>
+              ))}
+            </div>
+          </NavDropdown>
+        ))}
 
-    {/* Modal Component */}
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title style={{ fontWeight: 'bold', color: '#343a40' }}>Help & Support</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div style={{ textAlign: 'center' }}>
-          <h5>Welcome to Our Shop!</h5>
-          <p>
-            If you have any questions or need assistance, please feel free to reach out to our support team.
-            We are here to help you with your shopping experience!
-          </p>
-          <p>
-            <strong>Contact Us:</strong><br />
-            Email: info@mydresscode.co.in<br />
-            Phone: +91 8015010545
-          </p>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  </Navbar.Collapse>
-</Container>
+        {isAdmin && (
+          <Nav.Link
+            className="nav-item"
+            onClick={() => navigate('/add-category')}
+            style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap', marginRight: '10px' }} 
+          >
+            To Add
+          </Nav.Link>
+        )}
+      </Nav>
 
+      {/* Help & Support Link moved here */}
+      <Nav className="ms-0">
+        <Nav.Link
+          style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }} 
+          onClick={handleShow}
+        >
+          <FaHeadphonesAlt /> Help & Support
+        </Nav.Link>
+      </Nav>
+
+      {/* Modal Component */}
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ fontWeight: 'bold', color: '#343a40' }}>Help & Support</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div style={{ textAlign: 'center' }}>
+            <h5>Welcome to Our Shop!</h5>
+            <p>
+              If you have any questions or need assistance, please feel free to reach out to our support team.
+              We are here to help you with your shopping experience!
+            </p>
+            <p>
+              <strong>Contact Us:</strong><br />
+              Email: info@mydresscode.co.in<br />
+              Phone: +91 8015010545
+            </p>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Navbar.Collapse>
+  </Container>
 </Navbar>
+
 
     </>
   );

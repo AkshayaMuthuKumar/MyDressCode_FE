@@ -177,30 +177,28 @@ const CategoryPage = () => {
         </Carousel.Item>
         {/* Other slides */}
       </Carousel>
-      
+  
       <div className="row">
-        <div className="col-md-3">
+        {/* Sidebar - full width on small screens, 25% on medium and up */}
+        <div className="col-12 col-md-3 mb-4">
           <Sidebar onFilterChange={handleFilterChange} selectedFilters={selectedFilters} />
         </div>
-        <div className="col-md-9">
-          <div className="d-flex justify-content-between mb-4">
-            <select className="form-select w-25" value={sortOrder} onChange={handleSortChange}>
+  
+        {/* Product list section - full width on small screens, 75% on medium and up */}
+        <div className="col-12 col-md-9">
+          <div className="d-flex flex-wrap justify-content-between mb-4">
+            <select className="form-select w-25 w-md-25 mb-2 mb-md-0" value={sortOrder} onChange={handleSortChange}>
               <option value="ascending">Sort by Name (A-Z)</option>
               <option value="descending">Sort by Name (Z-A)</option>
             </select>
-
-            {/* <select className="form-select w-25" value={productsPerPage} onChange={handleProductsPerPageChange}>
-              <option value={6}>Show 6 per page</option>
-              <option value={12}>Show 12 per page</option>
-              <option value={18}>Show 18 per page</option>
-            </select> */}
           </div>
-
+  
+          {/* Product cards */}
           <div className="row">
             {currentProducts.length > 0 ? (
               currentProducts.map((product) => (
-                <div key={product.id} className="col-md-4 mb-4">
-                  <div className="card custom-card h-100" onClick={() => handleCardClick(product.product_id)}> {/* Use product ID */}
+                <div key={product.id} className="col-12 col-sm-6 col-md-4 mb-4">
+                  <div className="card custom-card h-100" onClick={() => handleCardClick(product.product_id)}>
                     <img src={product.image} className="card-img-top" alt={product.name} style={{ height: '200px', objectFit: 'cover' }} />
                     <div className="card-body d-flex flex-column justify-content-between">
                       <div>
@@ -210,7 +208,7 @@ const CategoryPage = () => {
                         <p className="card-text">Price: ₹ {product.discountAmount || product.originalAmount}</p>
                       </div>
                       <a href="#" className="btn custom-selected mt-3 align-self-end">
-                        <i className="fas fa-eye"></i> {/* Font Awesome Eye Icon */}
+                        <i className="fas fa-eye"></i>
                       </a>
                     </div>
                   </div>
@@ -222,8 +220,9 @@ const CategoryPage = () => {
               </div>
             )}
           </div>
-
-          <div className="pagination d-flex justify-content-center">
+  
+          {/* Pagination */}
+          <div className="pagination d-flex justify-content-center mt-4">
             {[...Array(totalPages)].map((_, i) => (
               <button
                 key={i}
@@ -238,6 +237,7 @@ const CategoryPage = () => {
       </div>
     </div>
   );
+  
 };
 
 export default CategoryPage;

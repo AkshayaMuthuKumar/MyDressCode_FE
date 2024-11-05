@@ -296,14 +296,6 @@ body {
   filter: brightness(80%);
 }
 
-.carousel-caption h3 {
-  animation: slideIn 1s ease;
-  color: white;
-}
-
-.carousel-caption p {
-  animation: fadeIn 2s ease;
-}
 
 /* Keyframe animations for text */
 @keyframes slideIn {
@@ -431,10 +423,6 @@ body {
   color: #ff6600; /* Orange color on hover */
 }
 
-.spacious-container {
-  margin-bottom: 60px; /* Adjust the value as needed */
-}
-
 .sidebar {
   background-color: #f8f9fa; /* Light background */
 }
@@ -496,6 +484,78 @@ body {
   background-color: #5a36a6; /* Darker lavender on hover */
 }
 
+.spacious-container {
+  max-width: 1200px; /* Center content within max-width */
+  margin: auto;
+  padding: 15px;
+}
+
+@media (max-width: 767px) {
+  /* Adjust carousel text alignment */
+  .carousel-caption h3, .carousel-caption p {
+      font-size: 1rem;
+  }
+
+  /* Adjust image containers for smaller screens */
+  .image-container img {
+      max-height: 200px;
+  }
+
+  /* Reduce font size and padding for footer */
+  .footer h5, .footer p, .footer a {
+      font-size: 0.9rem;
+  }
+}
+
+/* Example: Responsive Columns for Product and Category Cards */
+@media (max-width: 575px) {
+  .carousel-container {
+      padding: 0 10px;
+  }
+  .category-card h-100 {
+      height: auto;
+  }
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 120px; /* Move the sidebar down from the top */
+  right: -300px; /* Hide sidebar off-screen */
+  height: calc(100% - 300px); /* Adjust height to account for the top offset */
+  width: 300px; /* Sidebar width */
+  background-color: rgba(255, 255, 255, 0.9); /* Background color with some transparency */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5); /* Shadow effect */
+  transition: right 0.3s ease; /* Smooth transition */
+  z-index: 1000; /* Ensure it appears above other elements */
+}
 
 
+.sidebar-overlay.open {
+  right: 0; /* Show sidebar when open */
+}
 
+.close-button {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #343a40; /* Close button color */
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Positioning the close button */
+  z-index: 1001; /* Ensure it appears above sidebar content */
+}
+
+.sidebar-desktop {
+  display: none; /* Hide by default */
+}
+
+@media (min-width: 768px) {
+  .sidebar-desktop {
+    display: block; /* Show the static sidebar in desktop view */
+  }
+
+  .sidebar-overlay {
+    display: none; /* Hide the overlay on desktop view */
+  }
+}
