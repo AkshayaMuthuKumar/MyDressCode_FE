@@ -118,7 +118,6 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
       setIsAddedToCart(!isAddedToCart);
       localStorage.setItem(`cart-${productId}`, !isAddedToCart ? 'true' : 'false');
       localStorage.setItem(`buttonColor-${productId}`, !isAddedToCart ? '#dc3545' : '#6c757d');
-      window.location.reload(); // Reloads the page after toggle
 
     } else {
       // Toggle cart state for authenticated users
@@ -134,7 +133,6 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
         setButtonColor(buttonColor);
         setIsAddedToCart(isAdded);
         localStorage.setItem(`buttonColor-${productId}`, buttonColor);
-        window.location.reload(); // Reloads the page after toggle
 
       } catch (error) {
         console.error('Error toggling cart item:', error);
@@ -158,10 +156,7 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
       setIsAddedToWishlist(!isAddedToWishlist);
       localStorage.setItem(`wishlist-${productId}`, !isAddedToWishlist ? 'true' : 'false');
       localStorage.setItem(`wishlistButtonColor-${productId}`, !isAddedToWishlist ? '#dc3545' : '#6c757d');
-      window.location.reload(); // Reloads the page after toggle
-
     } else {
-      // Toggle wishlist state for authenticated users
       try {
         const response = await axios.post(
           `${API_URL}/users/${currentUserId}/toggleWishlistItem`, 
@@ -174,8 +169,6 @@ const ProductDetails = ({ setCartItems, cartItems, wishlistItems, setWishlistIte
         setWishlistButtonColor(buttonColor);
         setIsAddedToWishlist(isAdded);
         localStorage.setItem(`wishlistButtonColor-${productId}`, buttonColor);
-        window.location.reload(); // Reloads the page after toggle
-
       } catch (error) {
         console.error('Error toggling wishlist item:', error);
       }
