@@ -130,11 +130,11 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
       setSuccessMessage('Login successful!');
       setTimeout(() => {
         setShowLoginModal(false);
-        setSuccessMessage('');
-        setLoginData({ email: '', password: '' });
+        setSuccessMessage(' ');
+        setLoginData({ email: ' ', password: ' ' });
         setError('');
         window.location.reload();
-      }, 1000);
+      }, 3000);
     } catch (error) {
       setError('Login failed: ' + (error.response?.data?.message || error.message));
     }
@@ -198,12 +198,12 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
       setSuccessMessage('Signup successful! Please log in.');
 
       setTimeout(() => {
-        setSuccessMessage(''); // Clear the success message
-        setSignupData({ username: '', email: '', password: '', phone_number: '' }); // Clear the signup data
-        setShowSignupModal(false); // Close the modal
-        setError(''); // Clear any previous error messages
+        setSuccessMessage(''); 
+        setSignupData({ username: ' ', email: ' ', password: ' ', phone_number: ' ' }); 
+        setShowSignupModal(false); 
+        setError(''); 
 
-      }, 1500);
+      }, 3000);
 
     } catch (error) {
       setTimeout(() => {
@@ -256,7 +256,9 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
 
 
   return (
+
     <>
+    
       <div className="bg-white py-3 shadow-sm fixed-navbar" style={{ top: 0 }}>
         <Container className="d-flex justify-content-between align-items-center ">
         <Navbar.Brand onClick={() => navigate('/MyDressCode_FE')} style={{ cursor: 'pointer' }}>
@@ -477,11 +479,17 @@ wishlistItems.map((item, index) => (
         centered
         style={{ backdropFilter: 'blur(5px)' }}
       >
+        
         <Modal.Header closeButton>
           <Modal.Title style={{ color: '#6f42c1' }}>
             {isLogin ? "Login" : "Signup"}
           </Modal.Title>
         </Modal.Header>
+        {successMessage && (
+      <div className="alert alert-success text-center" role="alert">
+        {successMessage}
+      </div>
+    )}
         <Modal.Body style={{ backgroundColor: '#E6E6FA', padding: '40px' }}>
           {/* Toggle between Login and Signup forms */}
           {isLogin ? (
