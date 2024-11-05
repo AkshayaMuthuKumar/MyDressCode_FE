@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/MyDressCode_FE/static/css/main.b0ba0d5a.css",
-    "main.js": "/MyDressCode_FE/static/js/main.025979c4.js",
+    "main.js": "/MyDressCode_FE/static/js/main.f83a7ce6.js",
     "static/media/fa-solid-900.ttf": "/MyDressCode_FE/static/media/fa-solid-900.07ed6d5fa32c1d54af0f.ttf",
     "static/media/fa-brands-400.ttf": "/MyDressCode_FE/static/media/fa-brands-400.0ff70dcbf135d859ebf3.ttf",
     "static/media/fa-solid-900.woff2": "/MyDressCode_FE/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
@@ -12,10 +12,10 @@
     "static/media/fa-v4compatibility.woff2": "/MyDressCode_FE/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/MyDressCode_FE/index.html",
     "main.b0ba0d5a.css.map": "/MyDressCode_FE/static/css/main.b0ba0d5a.css.map",
-    "main.025979c4.js.map": "/MyDressCode_FE/static/js/main.025979c4.js.map"
+    "main.f83a7ce6.js.map": "/MyDressCode_FE/static/js/main.f83a7ce6.js.map"
   },
   "entrypoints": [
     "static/css/main.b0ba0d5a.css",
-    "static/js/main.025979c4.js"
+    "static/js/main.f83a7ce6.js"
   ]
 }
