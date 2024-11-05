@@ -290,8 +290,9 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
     </Form>
 
     <div className="d-flex align-items-center">
-      <span className="ms-4"> Hello, {currentUser ? currentUser.username : "Guest"}!</span>
-
+    <span className="ms-4 d-none d-md-inline">
+  Hello, {currentUser ? currentUser.username : "Guest"}!
+</span>
       {currentUser ? (
         <FiLogOut className="ms-4" style={{ cursor: 'pointer' }} onClick={handleLogout} />
       ) : (
