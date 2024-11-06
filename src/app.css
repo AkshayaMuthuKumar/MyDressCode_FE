@@ -485,9 +485,9 @@ body {
 }
 
 .spacious-container {
-  max-width: 1200px; /* Center content within max-width */
+  max-width: 2100px; /* Center content within max-width */
   margin: auto;
-  padding: 15px;
+  padding: 2px;
 }
 
 @media (max-width: 767px) {
@@ -559,3 +559,197 @@ body {
     display: none; /* Hide the overlay on desktop view */
   }
 }
+
+@media (max-width: 768px) {
+  .navbar-collapse {
+    text-align: left;
+    padding-left: 15px; /* Add space at the beginning */
+  }
+  .nav-item {
+    margin-bottom: 10px;
+  }
+}
+@media (max-width: 768px) {
+  .bg-white {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .navbar-brand {
+    margin-right: auto;
+  }
+  .wishlist-popup, .cart-popup {
+    width: 80vw;
+  }
+}
+
+/* Default desktop styles */
+/* Hide the custom-navbar-toggle on desktop */
+.custom-navbar-toggle {
+  display: none; /* Hide on larger screens */
+}
+
+/* Mobile view styles */
+@media (max-width: 767px) {
+  .custom-navbar-toggle {
+    display: block; /* Show only on mobile */
+    position: fixed;
+    left: 0;
+    top: 150px;
+    width: 250px;
+    max-width: 80%;
+    height: 100vh;
+    background-color: rgba(166, 111, 232, 0.8); /* Adds transparency */
+    z-index: 1050;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    transform: translateX(-100%); /* Initially hide off-screen */
+  }
+
+  .custom-navbar-toggle.show {
+    transform: translateX(0); /* Slide in when visible */
+  }
+}
+
+/* Ensure the Navbar.Collapse is visible on larger screens */
+@media (min-width: 768px) {
+  .navbar-collapse {
+    display: block !important; /* Ensure it's visible on large screens */
+  }
+}
+
+
+@media (max-width: 576px) {
+  .product {
+    width: 90%; /* Adjust width to ensure spacing around cards */
+    aspect-ratio: 1 / 1; /* Makes it square */
+    overflow: hidden; /* To handle any overflow of content */
+    margin:  auto; /* Centers the card horizontally */
+    display: block; /* Ensures the card is a block element, allowing centering */
+  }
+}
+
+.feature-item:hover {
+  transform: translateY(-10px);
+}
+
+.feature-item h5 {
+  font-size: 1.5rem;
+}
+
+
+  .feature-item:hover img {
+    transform: scale(1.1);
+  }
+  .feature-item:hover {
+    transform: translateY(-10px);
+  }
+
+  /* Mobile View Adjustments */
+  @media (max-width: 576px) {
+    .features-section .feature-item {
+      margin: 0 10px;
+      text-align: center; /* Ensure feature items are centered */
+
+    }
+  
+    .features-section .row {
+      display: flex;
+      flex-wrap: nowrap; /* Prevent wrapping of items */
+      justify-content: start;
+      animation: marquee 10s linear infinite; /* Apply marquee effect */
+      padding-left: 10px; /* Small gap on the left side */
+      width: 100%; /* Ensure the row takes full width */
+    }
+  
+    .features-section .col {
+      flex: 0 0 auto; /* Keep the columns from resizing */
+      margin-right: 15px; /* Add a small gap between items */
+    }
+  
+    .feature-item {
+      text-align: center;
+      max-width: 250px;
+      white-space: nowrap;
+    }
+    .features-section .feature-item p {
+      text-align: center; /* Align text to the left */
+      padding-left: 20px; /* Add indentation for the text */
+      font-size: 0.9rem; /* Optional: Adjust font size for better readability on mobile */
+      white-space: pre-line; /* Allows line breaks and wraps the text */
+      display: block;
+      margin-top: 10px;
+      max-width: 80%;
+      margin: auto;
+    }
+  }
+  
+  /* Keyframes for marquee effect */
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-200%); /* Move to the left */
+    }
+  }
+  
+  /* Duplicate the feature items for continuous effect */
+  .features-section .row:after {
+    content: '';
+    flex: 0 0 auto;
+    margin-right: 15px;
+  }
+
+  @media (max-width: 576px) {
+    /* Add margin-top to move the map column down in mobile view */
+    #map-section .row .col-md-4 {
+      margin-top: 30px; /* Adjust the value as needed */
+    }
+  }
+
+  @media (max-width: 576px) {
+    .footer .row .col-md-4 {
+      text-align: left;
+      padding-left: 10px; /* Adjust padding as needed */
+      margin-bottom: 20px; /* Adds gap between the columns */
+    }
+  
+    /* Optional: Adjust bottom row */
+    .footer .row.mt-5 .col {
+      text-align: left;
+      padding-left: 10px; /* Adjust padding as needed */
+      margin-top: 20px; /* Adds space above the bottom section */
+    }
+  
+    /* Add gap between footer items like links and contact info */
+    .footer .col-md-4 h5, .footer .col-md-4 p, .footer .col-md-4 ul {
+      margin-bottom: 15px; /* Adjust the gap between sections */
+    }
+  
+    .footer .list-unstyled li {
+      margin-bottom: 12px; /* Adds space between list items */
+    }
+  }
+  
+  .price-slider {
+    margin-bottom: 10px;
+  }
+  
+  .price-label {
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+  
+  .currency-label {
+    margin-right: 5px;
+  }
+  
+  .price-input {
+    width: 80px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+  }
+  
+
+  

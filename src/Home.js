@@ -5,6 +5,8 @@ import axios from 'axios';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import API_URL from './config';
+import { FaShippingFast, FaClock, FaUndo } from 'react-icons/fa';
+
 
 import { Link, useNavigate } from 'react-router-dom'; // Assuming you're using React Router
 const Home = () => {
@@ -76,7 +78,7 @@ const Home = () => {
     return chunkedProducts.map((chunk, index) => (
       <Row className="justify-content-center" key={index} style={{ display: index === currentIndex ? 'flex' : 'none', transition: 'opacity 0.5s' }}>
         {chunk.map((product) => (
-          <Col xs={6} md={3} key={product.id}>
+          <Col xs={6} md={3} key={product.id} className="product mb-4">
             {/* Wrap the card with Link to navigate to product details page */}
             <Link to={`/product/${product.product_id}`} style={{ textDecoration: 'none' }}>
               <div
@@ -349,7 +351,7 @@ const Home = () => {
                 <div className="text-overlay">
                   <h3>Festive Offer: Buy 2 Get 1 Free</h3>
                   <p>Traditional Sarees</p>
-                  <p className="text-danger">Starting From $80</p>
+                  <p className="text-danger">Starting From ₹ 80</p>
                 </div>
               </div>
             </div>
@@ -358,51 +360,50 @@ const Home = () => {
       </Container>
 
 
-      <div className="features-section spacious-container" id="about" style={{ backgroundColor: '#7a75c9', height: '480px', paddingTop: '140px', position: 'relative', overflow: 'hidden' }}>
-        {/* Optional background pattern or gradient */}
-        <div className="background-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: '0.1', backgroundImage: 'url(/path/to/pattern.png)' }}></div>
+      <div className="features-section spacious-container" id="about" style={{ backgroundColor: '#7a75c9', height: '350px', paddingTop: '90px', position: 'relative', overflow: 'hidden' }}>
+  {/* Optional background pattern or gradient */}
+  <div className="background-overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: '0.1', backgroundImage: 'url(/path/to/pattern.png)' }}></div>
 
-        <Container>
-          <Row className="text-center" data-aos="fade-up">
-            <Col md={4}>
-              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
-                {/* Replace with your actual icon */}
-                <img src="https://via.placeholder.com/80" alt="Free Shipping" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
-                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Free Shipping</h5>
-                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>Enjoy free shipping on all orders above ₹500.</p>
-              </div>
-            </Col>
+  <Container>
+    <Row className="text-center" data-aos="fade-up">
+      <Col md={4} sm={12} className="d-flex justify-content-center">
+        <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
+          {/* Free Shipping Icon */}
+          <FaShippingFast size={80} color="#fff" style={{ marginBottom: '20px', transition: 'transform 0.3s' }} />
+          <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Free Shipping</h5>
+          <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>
+            Enjoy free shipping on all orders above ₹500.
+          </p>
+        </div>
+      </Col>
 
-            <Col md={4}>
-              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
-                {/* Replace with your actual icon */}
-                <img src="https://via.placeholder.com/80" alt="24 Hours Delivery" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
-                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>24 Hours Delivery</h5>
-                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>Guaranteed fast delivery within 24 hours in select locations.</p>
-              </div>
-            </Col>
+      <Col md={4} sm={12} className="d-flex justify-content-center">
+        <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
+          {/* 24 Hours Delivery Icon */}
+          <FaClock size={80} color="#fff" style={{ marginBottom: '20px', transition: 'transform 0.3s' }} />
+          <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>24 Hours Delivery</h5>
+          <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>
+            Guaranteed fast delivery within 24 hours in select locations.
+          </p>
+        </div>
+      </Col>
 
-            <Col md={4}>
-              <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
-                {/* Replace with your actual icon */}
-                <img src="https://via.placeholder.com/80" alt="Easy Return" style={{ width: '80px', height: '80px', marginBottom: '20px', transition: 'transform 0.3s' }} />
-                <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Easy Return</h5>
-                <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>No-hassle returns within 30 days for all products.</p>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+      <Col md={4} sm={12} className="d-flex justify-content-center">
+        <div className="feature-item mb-4" style={{ transition: 'transform 0.3s', cursor: 'pointer' }}>
+          {/* Easy Return Icon */}
+          <FaUndo size={80} color="#fff" style={{ marginBottom: '20px', transition: 'transform 0.3s' }} />
+          <h5 className="text-white" style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Easy Return</h5>
+          <p className="text-white" style={{ fontSize: '1rem', maxWidth: '80%', margin: 'auto', opacity: 0.9 }}>
+            No-hassle returns within 30 days for all products.
+          </p>
+        </div>
+      </Col>
+    </Row>
+  </Container>
 
-        {/* Hover effects */}
-        <style jsx>{`
-    .feature-item:hover img {
-      transform: scale(1.1);
-    }
-    .feature-item:hover {
-      transform: translateY(-10px);
-    }
-  `}</style>
-      </div>
+ 
+</div>
+
       
       <Container className="my-5 spacious-container" id="map-section">
         <h2 className="text-center mb-4">VISIT US</h2>
@@ -473,87 +474,91 @@ const Home = () => {
 
 
 
-      <footer className="footer py-5" style={{ backgroundColor: '#7a75c9' }}>
-        <Container>
-          <Row>
-            {/* Left Section: Store Info with Icons */}
-            <Col md={4} style={{ color: 'white' }}>
-              <h5 style={{ fontSize: '1.5rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '20px' }}>
-                <i className="fas fa-store" style={{ marginRight: '10px' }}></i> My Dress Code
-              </h5>
-              <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.1rem', lineHeight: '1.7' }}>
-                <i className="fas fa-map-marker-alt" style={{ marginRight: '10px' }}></i>
-                #221, Surya Nivass, Main Road, Sangar Nagar, Salem - 636007, Tamilnadu, India
-              </p>
-              <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.1rem' }}>
-                <i className="fas fa-envelope" style={{ marginRight: '10px' }}></i> info@mydresscode.co.in
-              </p>
-              <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.1rem' }}>
-                <i className="fas fa-phone" style={{ marginRight: '10px' }}></i> +91 8015010545
-              </p>
-            </Col>
+      <footer className="footer py-3" style={{ backgroundColor: '#7a75c9' }}>
+  <Container>
+    <Row>
+      {/* Left Section: Store Info with Icons */}
+      <Col md={4} style={{ color: 'white' }}>
+        <h5 style={{ fontSize: '1.4rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '10px' }}>
+          <i className="fas fa-store" style={{ marginRight: '10px' }}></i> My Dress Code
+        </h5>
+        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem', lineHeight: '1.5' }}>
+          <i className="fas fa-map-marker-alt" style={{ marginRight: '10px' }}></i>
+          #221, Surya Nivass, Main Road, Sangar Nagar, Salem - 636007, Tamilnadu, India
+        </p>
+        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+          <i className="fas fa-envelope" style={{ marginRight: '10px' }}></i> info@mydresscode.co.in
+        </p>
+        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+          <i className="fas fa-phone" style={{ marginRight: '10px' }}></i> +91 8015010545
+        </p>
+      </Col>
 
-            {/* Center Section: Quick Links with Icons */}
-            <Col md={4} style={{ color: 'white' }}>
-              <h5 style={{ fontSize: '1.5rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '20px' }}>
-                <i className="fas fa-link" style={{ marginRight: '10px' }}></i> Quick Links
-              </h5>
-              <ul className="list-unstyled" style={{ paddingLeft: '0' }}>
-                <li style={{ marginBottom: '10px' }}>
-                  <a href="#about" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1.1rem' }}>
-                    <i className="fas fa-info-circle" style={{ marginRight: '10px' }}></i> About Us
-                  </a>
-                </li>
-                <li style={{ marginBottom: '10px' }}>
-                  <a href="#collections" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1.1rem' }}>
-                    <i className="fas fa-tshirt" style={{ marginRight: '10px' }}></i> Our Collections
-                  </a>
-                </li>
-                <li style={{ marginBottom: '10px' }}>
-                  <a href="#locate-us" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1.1rem' }}>
-                    <i className="fas fa-map-marker-alt" style={{ marginRight: '10px' }}></i> Contact
-                  </a>
-                </li>
-              </ul>
-            </Col>
+      {/* Center Section: Quick Links with Icons */}
+      <Col md={4} style={{ color: 'white' }}>
+        <h5 style={{ fontSize: '1.4rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '10px' }}>
+          <i className="fas fa-link" style={{ marginRight: '10px' }}></i> Quick Links
+        </h5>
+        <ul className="list-unstyled" style={{ paddingLeft: '0' }}>
+          <li style={{ marginBottom: '8px' }}>
+            <a href="#about" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+              <i className="fas fa-info-circle" style={{ marginRight: '10px' }}></i> About Us
+            </a>
+          </li>
+          <li style={{ marginBottom: '8px' }}>
+            <a href="#collections" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+              <i className="fas fa-tshirt" style={{ marginRight: '10px' }}></i> Our Collections
+            </a>
+          </li>
+          <li style={{ marginBottom: '8px' }}>
+            <a href="#locate-us" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+              <i className="fas fa-map-marker-alt" style={{ marginRight: '10px' }}></i> Contact
+            </a>
+          </li>
+        </ul>
+      </Col>
 
-            {/* Right Section: Store Hours with Icons */}
-            <Col md={4} style={{ color: 'white' }}>
-              <h5 style={{ fontSize: '1.5rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '20px' }}>
-                <i className="fas fa-clock" style={{ marginRight: '10px' }}></i> Store Hours
-              </h5>
-              <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.1rem', lineHeight: '1.7' }}>
-                <i className="fas fa-calendar-day" style={{ marginRight: '10px' }}></i> Monday - Saturday: 10 AM - 8 PM
-              </p>
-              <p style={{ fontFamily: 'Georgia, serif', fontSize: '1.1rem' }}>
-                <i className="fas fa-calendar-times" style={{ marginRight: '10px' }}></i> Sunday: Closed
-              </p>
+      {/* Right Section: Store Hours with Icons */}
+      <Col md={4} style={{ color: 'white' }}>
+        <h5 style={{ fontSize: '1.4rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '10px' }}>
+          <i className="fas fa-clock" style={{ marginRight: '10px' }}></i> Store Hours
+        </h5>
+        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem', lineHeight: '1.5' }}>
+          <i className="fas fa-calendar-day" style={{ marginRight: '10px' }}></i> Monday - Saturday: 10 AM - 8 PM
+        </p>
+        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+          <i className="fas fa-calendar-times" style={{ marginRight: '10px' }}></i> Sunday: Closed
+        </p>
 
-              <div style={{ marginTop: '30px' }}>
-                <h5 style={{ fontSize: '1.5rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '20px' }}>
-                  <i className="fas fa-share-alt" style={{ marginRight: '10px' }}></i> Follow Us
-                </h5>
-                <a href="#" style={{ color: 'white', marginRight: '15px', fontSize: '1.3rem' }}>
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" style={{ color: 'white', marginRight: '15px', fontSize: '1.3rem' }}>
-                  <i className="fab fa-instagram"></i>
-                </a>
-                <a href="#" style={{ color: 'white', marginRight: '15px', fontSize: '1.3rem' }}>
-                  <i className="fab fa-twitter"></i>
-                </a>
-              </div>
-            </Col>
-          </Row>
+        <div style={{ marginTop: '20px' }}>
+          <h5 style={{ fontSize: '1.4rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '10px' }}>
+            <i className="fas fa-share-alt" style={{ marginRight: '10px' }}></i> Follow Us
+          </h5>
+          <a href="#" style={{ color: 'white', marginRight: '10px', fontSize: '1.2rem' }}>
+            <i className="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" style={{ color: 'white', marginRight: '10px', fontSize: '1.2rem' }}>
+            <i className="fab fa-instagram"></i>
+          </a>
+          <a href="#" style={{ color: 'white', marginRight: '10px', fontSize: '1.2rem' }}>
+            <i className="fab fa-twitter"></i>
+          </a>
+        </div>
+      </Col>
+    </Row>
 
-          {/* Bottom Text */}
-          <Row className="mt-5">
-            <Col className="text-center" style={{ color: 'white', fontFamily: 'Helvetica, Arial, sans-serif', fontSize: '1.1rem' }}>
-              <p>&copy; {new Date().getFullYear()} My Dress Code. All rights reserved.</p>
-            </Col>
-          </Row>
-        </Container>
-      </footer>
+    {/* White Line Above the Copyright */}
+    <hr style={{ borderTop: '2px solid white', marginTop: '20px' }} />
+
+    {/* Bottom Text */}
+    <Row className="mt-2">
+      <Col className="text-center" style={{ color: 'white', fontFamily: 'Helvetica, Arial, sans-serif', fontSize: '1rem' }}>
+        <p>&copy; {new Date().getFullYear()} My Dress Code. All rights reserved.</p>
+      </Col>
+    </Row>
+  </Container>
+</footer>
+
 
 
 

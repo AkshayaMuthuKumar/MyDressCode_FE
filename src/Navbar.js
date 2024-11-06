@@ -33,6 +33,8 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [selectedSuggestion, setSelectedSuggestion] = useState(null);
+  const [showToggle, setShowToggle] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
 
   const handleClose = () => setShow(false);
@@ -45,6 +47,17 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
 
   const handleModalShow = () => setShowModal(true);
   const handleModalClose = () => setShowModal(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // Load counts from local storage
@@ -294,15 +307,15 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
   Hello, {currentUser ? currentUser.username : "Guest"}!
 </span>
       {currentUser ? (
-        <FiLogOut className="ms-4" style={{ cursor: 'pointer' }} onClick={handleLogout} />
+        <FiLogOut className="ms-lg-4 ms-0" style={{ cursor: 'pointer' }} onClick={handleLogout} />
       ) : (
-        <FiUserPlus className="ms-4" style={{ cursor: 'pointer' }} onClick={handleModalShow} />
+        <FiUserPlus className="ms-lg-4 ms-0" style={{ cursor: 'pointer' }} onClick={handleModalShow} />
       )}
 
       {/* Wishlist Popup */}
       <Nav.Link
-        className="text-dark ms-4 position-relative"
-        onMouseEnter={handleWishlistMouseEnter}
+  className="text-dark ms-lg-4 ms-3 position-relative"
+  onMouseEnter={handleWishlistMouseEnter}
         onMouseLeave={handleWishlistMouseLeave}
         onClick={() => navigate('/wishlist')}
         style={{ cursor: 'pointer' }}
@@ -375,8 +388,8 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
 
       {/* Cart Popup */}
       <Nav.Link
-        className="text-dark ms-4 position-relative"
-        onMouseEnter={handleCartMouseEnter}
+  className="text-dark ms-lg-4 ms-3 position-relative"
+  onMouseEnter={handleCartMouseEnter}
         onMouseLeave={handleCartMouseLeave}
         onClick={() => navigate('/cart')}
         style={{ cursor: 'pointer' }}
@@ -534,108 +547,156 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
         </Modal.Body>
       </Modal>
 
-      <Navbar
-  expand="md"
-  className="fixed-anothernav d-flex justify-content-center"
-  style={{
-    backgroundColor: '#7a75c9',
-    width: '100%',
-    borderRadius: '0',
-    color: 'white',
-    paddingTop: '0px',
-  }}
->
-  <Container>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="me-auto d-flex justify-content-center flex-wrap">
-        {/* Home link */}
-        <Nav.Link as={Link} to="#home" style={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }} className="nav-item">
-          Home
-        </Nav.Link>
-        <Nav.Link 
-          as={Link} 
-          to="/category/just-arrived" 
-          style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap', marginRight: '10px' }} 
-          className="nav-item">
-          Just Arrived!
-        </Nav.Link>
+      <Navbar expand="md" className="fixed-anothernav d-flex justify-content-center" style={{ backgroundColor: '#7a75c9', width: '100%', borderRadius: '0', color: 'white' }}>
+      <Container>
+        {/* Navbar Toggle visible only on mobile screens */}
+        <Navbar.Toggle aria-controls="basic-navbar-nav" className="ms-2 me-auto mt-1 d-md-none" onClick={() => setShowToggle(!showToggle)} />
+        
+        {/* Show custom-navbar-toggle only on mobile view */}
+        {isMobile && (
+          <div className={`custom-navbar-toggle ${showToggle ? 'show' : ''}`}>
+            {/* Navbar Collapse */}
+            <Navbar.Collapse id="basic-navbar-nav" className="d-md-block">
+              <Nav className="me-auto d-flex justify-content-center flex-wrap">
+                {/* Home link */}
+                <Nav.Link as={Link} to="#home" style={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }} className="nav-item" onClick={() => setShowToggle(false)}>
+                  Home
+                </Nav.Link>
 
-        {categories.map((categoryObj, index) => (
-          <NavDropdown
-            key={index}
-            title={<span style={{ color: 'white', fontWeight: 'bold', marginRight: '20px' }}>{categoryObj.category}</span>}
-            id={`category-dropdown-${index}`}
-            className="nav-item"
-          >
-            <div
-              style={{
-                maxHeight: '300px', // Max height to prevent the dropdown from getting too large
-                overflowY: 'auto', // Enable scrolling when the content exceeds max height
-              }}
-            >
-              {categoryObj.subcategories.map((subcategory, subIndex) => (
-                <NavDropdown.Item
-                  key={subIndex}
-                  onClick={() => handleSubcategoryClick(categoryObj, subcategory)}
-                  style={{ color: 'black', fontWeight: 'normal' }}
-                >
-                  {subcategory}
-                </NavDropdown.Item>
-              ))}
-            </div>
-          </NavDropdown>
-        ))}
+                {/* Just Arrived link */}
+                <Nav.Link as={Link} to="/category/just-arrived" style={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }} className="nav-item" onClick={() => setShowToggle(false)}>
+                  Just Arrived!
+                </Nav.Link>
 
-        {isAdmin && (
-          <Nav.Link
-            className="nav-item"
-            onClick={() => navigate('/add-category')}
-            style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap', marginRight: '10px' }} 
-          >
-            To Add
-          </Nav.Link>
-        )}
-      </Nav>
+                {/* Categories Dropdown */}
+                {categories.map((categoryObj, index) => (
+                  <NavDropdown
+                    key={index}
+                    title={<span style={{ color: 'white', fontWeight: 'bold', marginRight: '20px' }}>{categoryObj.category}</span>}
+                    id={`category-dropdown-${index}`}
+                    className="nav-item"
+                  >
+                    <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                      {categoryObj.subcategories.map((subcategory, subIndex) => (
+                        <NavDropdown.Item
+                          key={subIndex}
+                          onClick={() => handleSubcategoryClick(categoryObj, subcategory)}
+                          style={{ color: 'black', fontWeight: 'normal' }}
+                        >
+                          {subcategory}
+                        </NavDropdown.Item>
+                      ))}
+                    </div>
+                  </NavDropdown>
+                ))}
 
-      {/* Help & Support Link moved here */}
-      <Nav className="ms-0">
-        <Nav.Link
-          style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }} 
-          onClick={handleShow}
-        >
-          <FaHeadphonesAlt /> Help & Support
-        </Nav.Link>
-      </Nav>
+                {/* Admin Only Link */}
+                {isAdmin && (
+                  <Nav.Link
+                    className="nav-item"
+                    onClick={() => navigate('/add-category')}
+                    style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap', marginRight: '10px' }} 
+                  >
+                    To Add
+                  </Nav.Link>
+                )}
+              </Nav>
 
-      {/* Modal Component */}
-      <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title style={{ fontWeight: 'bold', color: '#343a40' }}>Help & Support</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div style={{ textAlign: 'center' }}>
-            <h5>Welcome to Our Shop!</h5>
-            <p>
-              If you have any questions or need assistance, please feel free to reach out to our support team.
-              We are here to help you with your shopping experience!
-            </p>
-            <p>
-              <strong>Contact Us:</strong><br />
-              Email: info@mydresscode.co.in<br />
-              Phone: +91 8015010545
-            </p>
+              {/* Help & Support Link */}
+              <Nav className="ms-0">
+                <Nav.Link style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }} onClick={handleShow}>
+                  <FaHeadphonesAlt /> Help & Support
+                </Nav.Link>
+              </Nav>
+
+              {/* Modal Component */}
+              <Modal show={show} onHide={handleClose} centered>
+                <Modal.Header closeButton>
+                  <Modal.Title style={{ fontWeight: 'bold', color: '#343a40' }}>Help & Support</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <div style={{ textAlign: 'center' }}>
+                    <h5>Welcome to Our Shop!</h5>
+                    <p>
+                      If you have any questions or need assistance, please feel free to reach out to our support team.
+                      We are here to help you with your shopping experience!
+                    </p>
+                    <p>
+                      <strong>Contact Us:</strong><br />
+                      Email: info@mydresscode.co.in<br />
+                      Phone: +91 8015010545
+                    </p>
+                  </div>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleClose}>
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </Navbar.Collapse>
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
+        )}
+
+        {/* Navbar Collapse for desktop */}
+        {!isMobile && (
+          <Navbar.Collapse id="basic-navbar-nav" className="d-md-block">
+            <Nav className="me-auto d-flex justify-content-center flex-wrap">
+              {/* Home link */}
+              <Nav.Link as={Link} to="#home" style={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }} className="nav-item">
+                Home
+              </Nav.Link>
+
+              {/* Just Arrived link */}
+              <Nav.Link as={Link} to="/category/just-arrived" style={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }} className="nav-item">
+                Just Arrived!
+              </Nav.Link>
+
+              {/* Categories Dropdown */}
+              {categories.map((categoryObj, index) => (
+                <NavDropdown
+                  key={index}
+                  title={<span style={{ color: 'white', fontWeight: 'bold', marginRight: '20px' }}>{categoryObj.category}</span>}
+                  id={`category-dropdown-${index}`}
+                  className="nav-item"
+                >
+                  <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                    {categoryObj.subcategories.map((subcategory, subIndex) => (
+                      <NavDropdown.Item
+                        key={subIndex}
+                        onClick={() => handleSubcategoryClick(categoryObj, subcategory)}
+                        style={{ color: 'black', fontWeight: 'normal' }}
+                      >
+                        {subcategory}
+                      </NavDropdown.Item>
+                    ))}
+                  </div>
+                </NavDropdown>
+              ))}
+
+              {/* Admin Only Link */}
+              {isAdmin && (
+                <Nav.Link
+                  className="nav-item"
+                  onClick={() => navigate('/add-category')}
+                  style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap', marginRight: '10px' }} 
+                >
+                  To Add
+                </Nav.Link>
+              )}
+            </Nav>
+
+            {/* Help & Support Link */}
+            <Nav className="ms-0">
+              <Nav.Link style={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }} onClick={handleShow}>
+                <FaHeadphonesAlt /> Help & Support
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        )}
+      </Container>
+    </Navbar>
+
 
 
     </>

@@ -30,11 +30,11 @@ const Sidebar = ({ onFilterChange, selectedFilters }) => {
         const maxPrice = Math.max(...prices);
 
         setPriceRanges([
-          { label: `< ₹ 350`, min: 0, max: 350 },
-          { label: `₹ 350 - ₹ 800`, min: 350, max: 800 },
-          { label: `₹ 800 - ₹ 1500`, min: 800, max: 1500 },
-          { label: `₹ 1500 - ₹ 4000`, min: 1500, max: 4000 },
-          { label: `> ₹ 4000`, min: 4000, max: maxPrice },
+          { label: `More than ₹ 350`, min: 0, max: 350 },
+          { label: `Between ₹ 350 - ₹ 800`, min: 350, max: 800 },
+          { label: `Between ₹ 800 - ₹ 1500`, min: 800, max: 1500 },
+          { label: `Between ₹ 1500 - ₹ 4000`, min: 1500, max: 4000 },
+          { label: `More than ₹ 4000`, min: 4000, max: maxPrice },
         ]);
       } catch (error) {
         console.error('Error fetching filters:', error);
