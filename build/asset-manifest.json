@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/MyDressCode_FE/static/css/main.5d03b868.css",
-    "main.js": "/MyDressCode_FE/static/js/main.862f13a9.js",
+    "main.css": "/MyDressCode_FE/static/css/main.1926061d.css",
+    "main.js": "/MyDressCode_FE/static/js/main.29711993.js",
     "static/media/fa-solid-900.ttf": "/MyDressCode_FE/static/media/fa-solid-900.07ed6d5fa32c1d54af0f.ttf",
     "static/media/fa-brands-400.ttf": "/MyDressCode_FE/static/media/fa-brands-400.0ff70dcbf135d859ebf3.ttf",
     "static/media/fa-solid-900.woff2": "/MyDressCode_FE/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
@@ -11,11 +11,11 @@
     "static/media/fa-v4compatibility.ttf": "/MyDressCode_FE/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
     "static/media/fa-v4compatibility.woff2": "/MyDressCode_FE/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/MyDressCode_FE/index.html",
-    "main.5d03b868.css.map": "/MyDressCode_FE/static/css/main.5d03b868.css.map",
-    "main.862f13a9.js.map": "/MyDressCode_FE/static/js/main.862f13a9.js.map"
+    "main.1926061d.css.map": "/MyDressCode_FE/static/css/main.1926061d.css.map",
+    "main.29711993.js.map": "/MyDressCode_FE/static/js/main.29711993.js.map"
   },
   "entrypoints": [
-    "static/css/main.5d03b868.css",
-    "static/js/main.862f13a9.js"
+    "static/css/main.1926061d.css",
+    "static/js/main.29711993.js"
   ]
 }

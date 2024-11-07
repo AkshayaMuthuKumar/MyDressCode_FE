@@ -218,7 +218,7 @@ const Home = () => {
   return (
     <div>
 
-      <Carousel className="spacious-container">
+      <Carousel className="spaciouscarousel-container">
         <Carousel.Item>
           <img
             className="d-block w-100"

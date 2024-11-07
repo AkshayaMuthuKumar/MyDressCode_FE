@@ -547,7 +547,7 @@ body{
   background-color: #5a36a6; /* Darker lavender on hover */
 }
 
-.spacious-container {
+.spaciouscarousel-container {
   max-width: 2100px; /* Center content within max-width */
   margin: auto;
   padding: 2px;
@@ -835,7 +835,7 @@ body{
      }
 
      .category-carousel.mt-3 {
-      margin-top: 65px !important;
+      margin-top: 62px !important;
     }
 
     .category-carousel {
@@ -845,7 +845,7 @@ body{
 
      @media (max-width: 767px) {
       .category-carousel.mt-3 {
-        margin-top: 60px !important;
+        margin-top: 58px !important;
       }
       .category-carousel {
         width: 120%; /* Ensure full width on small screens */

@@ -175,7 +175,31 @@ const CategoryPage = () => {
             <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
           </Carousel.Caption>
         </Carousel.Item>
-        {/* Other slides */}
+
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src="https://via.placeholder.com/1000x400"
+            alt="First slide"
+          />
+          <Carousel.Caption>
+            <h3>Second Slide Label</h3>
+            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src="https://via.placeholder.com/1000x400"
+            alt="First slide"
+          />
+          <Carousel.Caption>
+            <h3>Third Slide Label</h3>
+            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+
       </Carousel>
   
       <div className="row">
