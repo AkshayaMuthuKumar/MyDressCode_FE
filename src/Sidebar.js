@@ -71,8 +71,8 @@ const Sidebar = ({ onFilterChange, selectedFilters }) => {
 
       {/* Sidebar overlay for mobile view */}
       <div className={`sidebar-overlay ${isOpen ? 'open' : ''}`}>
-        <div className="sidebar-content p-4 bg-light rounded shadow-sm">
-          <button onClick={toggleSidebar} className="close-button">
+      <div className="sidebar-content p-4 bg-light rounded shadow-sm" style={{ fontFamily: 'Dancing Script', fontSize: '16px', marginTop: '10px' }}>
+      <button onClick={toggleSidebar} className="close-button mt-2">
             <FaTimes />
           </button>
 
@@ -154,8 +154,8 @@ const Sidebar = ({ onFilterChange, selectedFilters }) => {
 
       {/* Static sidebar for desktop view */}
       <div className="sidebar-desktop d-none d-md-block">
-        <div className="sidebar-content p-4 bg-light rounded shadow-sm" style={{ width: '300px', height: '100%', overflowY: 'auto', fontFamily: 'Arial, sans-serif' }}>
-          <h3 className="text-center mb-4" style={{ color: '#343a40', fontWeight: 'bold' }}>Filters</h3>
+      <div className="sidebar-content p-4 bg-light rounded shadow-sm" style={{ fontFamily: 'Dancing Script', fontSize: '16px' }}>
+      <h3 className="text-center mb-4" style={{ color: '#343a40', fontWeight: 'bold' }}>Filters</h3>
           {/* Include the same filter components here for desktop view */}
           {/* Price Range Filter */}
           <h5 onClick={() => setOpenFilters({ ...openFilters, price: !openFilters.price })} className="filter-heading" style={{ cursor: 'pointer', margin: '1.5rem 0', color: '#6f42c1' }}>

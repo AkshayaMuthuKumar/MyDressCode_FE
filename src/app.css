@@ -828,6 +828,29 @@ body{
        font-size: 16px; /* Adjust the size as needed */
 
      }
+
+     .sidebar-overlay .sidebar-desktop{
+      font-family: 'Dancing Script';
+       font-size: 16px; /* Adjust the size as needed */
+     }
+
+     .category-carousel.mt-3 {
+      margin-top: 65px !important;
+    }
+
+    .category-carousel {
+      width: 120%; /* Increases width of carousel */
+      margin-left: -10%; /* Centers the carousel if it overflows */
+    }
+
+     @media (max-width: 767px) {
+      .category-carousel.mt-3 {
+        margin-top: 60px !important;
+      }
+      .category-carousel {
+        width: 120%; /* Ensure full width on small screens */
+      }
+    }
     
 
   

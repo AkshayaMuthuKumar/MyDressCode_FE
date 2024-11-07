@@ -162,7 +162,7 @@ const CategoryPage = () => {
 
   return (
     <div className="category-page container mt-4">
-      <Carousel className="mt-3 mb-5">
+      <Carousel className="mt-3 mb-5 category-carousel">
         {/* Carousel items */}
         <Carousel.Item>
           <img
