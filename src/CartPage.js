@@ -10,7 +10,6 @@ import { AuthContext } from '../src/UserContext';
 
 const CartPage = ({ cartItems, removeFromCart, currentUser }) => {
   const { isAuthenticated} = useContext(AuthContext);
-console.log ("cartItems",cartItems)
   const navigate = useNavigate();
   const { productId } = useParams();
 
@@ -42,6 +41,7 @@ console.log ("cartItems",cartItems)
   const handleCheckout = async () => {
     if (!isAuthenticated) {
       setShowAlert(true);
+      return; 
     } 
     
     const isScriptLoaded = await loadRazorpayScript();
@@ -49,6 +49,7 @@ console.log ("cartItems",cartItems)
       alert('Razorpay SDK failed to load. Please try again.');
       return;
     }
+    const isMobile = window.innerWidth <= 768; // Simple check for mobile view
 
     try {
       const response = await axios.post(`${API_URL}/create-order`, { amount: cartTotal, currency: 'INR' });
@@ -61,6 +62,15 @@ console.log ("cartItems",cartItems)
           alert('Payment Successful!');
           setShowReviewModal(true); // Open review modal after successful payment
         },
+        modal: {
+          backdropclose: true, // Allow closing by clicking outside the modal
+          ondismiss: () => {
+            if (isMobile) {
+              alert('Payment window closed');
+            }
+          }
+        }
+  
       };
 
       const razorpay = new window.Razorpay(options);

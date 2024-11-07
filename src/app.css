@@ -25,9 +25,11 @@
     border-right: 1px solid #fff; /* Adds a thin white line between items */
   }
   
-  /* .nav-item:last-child {
-    border-right: none; /* Removes the border from the last item */
-
+  @media (max-width: 768px) {
+    .nav-item {
+        border-right: none; /* Removes the border in mobile view */
+    }
+}
   
  /* Position the image relative to the card */
 .category-image-wrapper {
@@ -616,7 +618,16 @@ body {
     display: block !important; /* Ensure it's visible on large screens */
   }
 }
-
+@media (max-width: 768px) {
+  .spacious-container {
+      margin-top: 60px; /* Adjust this value to move the carousel down */
+  }
+}
+@media (max-width: 768px) {
+  .carousel-caption {
+      display: none;
+  }
+}
 
 @media (max-width: 576px) {
   .product {

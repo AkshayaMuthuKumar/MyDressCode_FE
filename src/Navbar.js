@@ -39,9 +39,7 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const isAuthenticated = () => {
-    return !!localStorage.getItem("token");  // or sessionStorage
-  };
+ 
   const [showModal, setShowModal] = useState(false);
   const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
 
@@ -549,26 +547,20 @@ const CustomNavbar = ({ cartItems, wishlistItems, setCartItems, setWishlistItems
 
       <Navbar expand="md" className="fixed-anothernav d-flex justify-content-center" style={{ backgroundColor: '#7a75c9', width: '100%', borderRadius: '0', color: 'white' }}>
       <Container>
-        {/* Navbar Toggle visible only on mobile screens */}
         <Navbar.Toggle aria-controls="basic-navbar-nav" className="ms-2 me-auto mt-1 d-md-none" onClick={() => setShowToggle(!showToggle)} />
         
-        {/* Show custom-navbar-toggle only on mobile view */}
         {isMobile && (
           <div className={`custom-navbar-toggle ${showToggle ? 'show' : ''}`}>
-            {/* Navbar Collapse */}
             <Navbar.Collapse id="basic-navbar-nav" className="d-md-block">
               <Nav className="me-auto d-flex justify-content-center flex-wrap">
-                {/* Home link */}
                 <Nav.Link as={Link} to="#home" style={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }} className="nav-item" onClick={() => setShowToggle(false)}>
                   Home
                 </Nav.Link>
 
-                {/* Just Arrived link */}
                 <Nav.Link as={Link} to="/category/just-arrived" style={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }} className="nav-item" onClick={() => setShowToggle(false)}>
                   Just Arrived!
                 </Nav.Link>
 
-                {/* Categories Dropdown */}
                 {categories.map((categoryObj, index) => (
                   <NavDropdown
                     key={index}
