@@ -74,7 +74,7 @@ const Home = () => {
     for (let i = 0; i < productArray.length; i += 4) {
       chunkedProducts.push(productArray.slice(i, i + 4));
     }
-
+  
     return chunkedProducts.map((chunk, index) => (
       <Row className="justify-content-center" key={index} style={{ display: index === currentIndex ? 'flex' : 'none', transition: 'opacity 0.5s' }}>
         {chunk.map((product) => (
@@ -82,13 +82,13 @@ const Home = () => {
             {/* Wrap the card with Link to navigate to product details page */}
             <Link to={`/product/${product.product_id}`} style={{ textDecoration: 'none' }}>
               <div
-                className="card"
+                className="card product-card"
                 style={{
                   border: '1px solid #e0e0e0',
                   borderRadius: '10px',
                   padding: '10px',
                   position: 'relative',
-                  height: '100%', // Ensures the card takes full height
+                  height: '100%', // Default height, adjusted on mobile via CSS
                   display: 'flex',
                   flexDirection: 'column', // Aligns content vertically
                 }}
@@ -105,8 +105,6 @@ const Home = () => {
                   }}
                 />
                 <div className="card-body text-center" style={{ flexGrow: 1 }}>
-                  <div className="icon-group mb-2">
-                  </div>
                   <h5 className="card-title" style={{ fontSize: '1rem' }}>{product.name}</h5>
                   <div className="price" style={{ fontSize: '1.25rem', color: '#6f42c1' }}>
                     ₹ {product.discountAmount}
@@ -132,20 +130,20 @@ const Home = () => {
       </Row>
     ));
   };
+  
 
   const renderRecentProducts = () => {
-    
     return (
       <Row className="justify-content-center">
         {products.recent.map((product) => (
           <Col xs={12} sm={6} md={4} lg={3} xl={2} key={product.id} className="mb-4">
             <Link to={`/product/${product.product_id}`} style={{ textDecoration: 'none' }}>
-              <Card style={{
+              <Card className="product-card" style={{
                 border: '1px solid #e0e0e0',
                 borderRadius: '10px',
                 padding: '10px',
                 position: 'relative',
-                height: '100%',
+                height: '100%', // Default height, adjusted on mobile via CSS
                 display: 'flex',
                 flexDirection: 'column',
               }}>
@@ -173,7 +171,7 @@ const Home = () => {
                     {product.name.toUpperCase()}
                   </h5>
                   <div className="price" style={{ fontSize: '15px', color: '#6f42c1' }}>
-                    ₹ {product.discountAmount}<br/>
+                    ₹ {product.discountAmount}<br />
                     <span style={{ textDecoration: 'line-through', marginLeft: '5px', fontSize: '13px', color: '#999' }}>
                       ₹ {product.originalAmount}
                     </span>
@@ -188,9 +186,27 @@ const Home = () => {
         ))}
       </Row>
     );
-    
   };
-  const itemsPerSlide = 4; // Number of images per slide
+  
+  
+  const [itemsPerSlide, setItemsPerSlide] = useState(4); // Default to 4 for larger screens
+
+  useEffect(() => {
+    const updateItemsPerSlide = () => {
+      if (window.innerWidth <= 768) {
+        setItemsPerSlide(1); // 1 item per slide for mobile
+      } else {
+        setItemsPerSlide(4); // 4 items per slide for larger screens
+      }
+    };
+  
+    // Call the function on component mount and window resize
+    updateItemsPerSlide();
+    window.addEventListener("resize", updateItemsPerSlide);
+  
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener("resize", updateItemsPerSlide);
+  }, []);
 
   const handlePrev = () => {
     setCurrentIndex(prevIndex => (prevIndex - itemsPerSlide + topCategories.length) % topCategories.length);
@@ -261,7 +277,7 @@ const Home = () => {
                 <Row className="justify-content-center">
                 {topCategories.slice(currentIndex, currentIndex + itemsPerSlide).map((category, index) => (
                     
-                    <Col lg={3} md={4} sm={6} xs={12} className="mb-4" data-aos="fade-up" key={index}>
+              <Col lg={3} md={4} sm={6} xs={12} className="mb-4" data-aos="fade-up" key={index}>
                         <Card className="category-card h-100" onClick={() => handleCardClick(category)}>
                           <div className="category-image-wrapper">
                             <Card.Img variant="top" src={category.image} alt={category.name} className="category-image" />
@@ -285,7 +301,7 @@ const Home = () => {
       </Container>
 
       <Container className="my-5 spacious-container" id="shop">
-        <h2 className="text-center">Products on Sale</h2>
+        <h2 className="text-center">PRODUCTS ON SALE</h2>
         <p className="text-center mb-4">When the music’s over, turn off the lights</p>
 
         <Tab.Container activeKey={key} onSelect={(k) => setKey(k)}>
@@ -475,43 +491,43 @@ const Home = () => {
 
 
       <footer className="footer py-3" style={{ backgroundColor: '#7a75c9' }}>
-  <Container>
+  <Container className='end'>
     <Row>
       {/* Left Section: Store Info with Icons */}
       <Col md={4} style={{ color: 'white' }}>
-        <h5 style={{ fontSize: '1.4rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '10px' }}>
+        <h5 style={{ fontSize: '1.4rem', marginBottom: '10px' }}>
           <i className="fas fa-store" style={{ marginRight: '10px' }}></i> My Dress Code
         </h5>
-        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem', lineHeight: '1.5' }}>
+        <p style={{ fontSize: '1rem', lineHeight: '1.5' }}>
           <i className="fas fa-map-marker-alt" style={{ marginRight: '10px' }}></i>
           #221, Surya Nivass, Main Road, Sangar Nagar, Salem - 636007, Tamilnadu, India
         </p>
-        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+        <p style={{ fontSize: '1rem' }}>
           <i className="fas fa-envelope" style={{ marginRight: '10px' }}></i> info@mydresscode.co.in
         </p>
-        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+        <p style={{ fontSize: '1rem' }}>
           <i className="fas fa-phone" style={{ marginRight: '10px' }}></i> +91 8015010545
         </p>
       </Col>
 
       {/* Center Section: Quick Links with Icons */}
       <Col md={4} style={{ color: 'white' }}>
-        <h5 style={{ fontSize: '1.4rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '10px' }}>
+        <h5 style={{ fontSize: '1.4rem', marginBottom: '10px' }}>
           <i className="fas fa-link" style={{ marginRight: '10px' }}></i> Quick Links
         </h5>
         <ul className="list-unstyled" style={{ paddingLeft: '0' }}>
           <li style={{ marginBottom: '8px' }}>
-            <a href="#about" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+            <a href="#about" style={{ color: 'white', textDecoration: 'none', fontSize: '1rem' }}>
               <i className="fas fa-info-circle" style={{ marginRight: '10px' }}></i> About Us
             </a>
           </li>
           <li style={{ marginBottom: '8px' }}>
-            <a href="#collections" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+            <a href="#collections" style={{ color: 'white', textDecoration: 'none', fontSize: '1rem' }}>
               <i className="fas fa-tshirt" style={{ marginRight: '10px' }}></i> Our Collections
             </a>
           </li>
           <li style={{ marginBottom: '8px' }}>
-            <a href="#locate-us" style={{ color: 'white', textDecoration: 'none', fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+            <a href="#locate-us" style={{ color: 'white', textDecoration: 'none', fontSize: '1rem' }}>
               <i className="fas fa-map-marker-alt" style={{ marginRight: '10px' }}></i> Contact
             </a>
           </li>
@@ -520,18 +536,18 @@ const Home = () => {
 
       {/* Right Section: Store Hours with Icons */}
       <Col md={4} style={{ color: 'white' }}>
-        <h5 style={{ fontSize: '1.4rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '10px' }}>
+        <h5 style={{ fontSize: '1.4rem', marginBottom: '10px' }}>
           <i className="fas fa-clock" style={{ marginRight: '10px' }}></i> Store Hours
         </h5>
-        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem', lineHeight: '1.5' }}>
+        <p style={{ fontSize: '1rem', lineHeight: '1.5' }}>
           <i className="fas fa-calendar-day" style={{ marginRight: '10px' }}></i> Monday - Saturday: 10 AM - 8 PM
         </p>
-        <p style={{ fontFamily: 'Georgia, serif', fontSize: '1rem' }}>
+        <p style={{ fontSize: '1rem' }}>
           <i className="fas fa-calendar-times" style={{ marginRight: '10px' }}></i> Sunday: Closed
         </p>
 
         <div style={{ marginTop: '20px' }}>
-          <h5 style={{ fontSize: '1.4rem', fontFamily: 'Helvetica, Arial, sans-serif', marginBottom: '10px' }}>
+          <h5 style={{ fontSize: '1.4rem', marginBottom: '10px' }}>
             <i className="fas fa-share-alt" style={{ marginRight: '10px' }}></i> Follow Us
           </h5>
           <a href="#" style={{ color: 'white', marginRight: '10px', fontSize: '1.2rem' }}>
@@ -552,12 +568,13 @@ const Home = () => {
 
     {/* Bottom Text */}
     <Row className="mt-2">
-      <Col className="text-center" style={{ color: 'white', fontFamily: 'Helvetica, Arial, sans-serif', fontSize: '1rem' }}>
+      <Col className="text-center" style={{ color: 'white', fontSize: '1rem' }}>
         <p>&copy; {new Date().getFullYear()} My Dress Code. All rights reserved.</p>
       </Col>
     </Row>
   </Container>
 </footer>
+
 
 
 
